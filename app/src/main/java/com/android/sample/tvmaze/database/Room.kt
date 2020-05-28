@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 
 /**
- * Data Access Object for the category table.
+ * Data Access Object for the show table.
  */
 @Dao
 interface ShowDao {
