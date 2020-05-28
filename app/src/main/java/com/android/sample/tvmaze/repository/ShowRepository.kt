@@ -1,7 +1,6 @@
 package com.android.sample.tvmaze.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.android.sample.tvmaze.database.ShowDao
 import com.android.sample.tvmaze.database.asDomainModel
@@ -10,7 +9,9 @@ import com.android.sample.tvmaze.domain.asDatabaseModel
 import com.android.sample.tvmaze.network.TVMazeService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import retrofit2.await
+import timber.log.Timber
 
 class ShowRepository(
     private val showDao: ShowDao,
@@ -29,7 +30,11 @@ class ShowRepository(
      * Refresh the shows stored in the offline cache.
      */
     suspend fun refreshShows() = withContext(Dispatchers.IO) {
-        val news = api.fetchShowList().await()
-        showDao.insertAll(*news.asDatabaseModel())
+        try {
+            val news = api.fetchShowList().await()
+            showDao.insertAll(*news.asDatabaseModel())
+        } catch (err: HttpException) {
+            Timber.e(err)
+        }
     }
 }

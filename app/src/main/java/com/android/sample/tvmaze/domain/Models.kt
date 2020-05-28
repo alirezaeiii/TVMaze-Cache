@@ -14,7 +14,7 @@ data class Show(
 ) : Parcelable
 
 @Parcelize
-class Image(
+data class Image(
     val medium: String,
     val original: String
 ) : Parcelable
