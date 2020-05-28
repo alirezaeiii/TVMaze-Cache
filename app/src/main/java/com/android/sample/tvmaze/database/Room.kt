@@ -2,7 +2,6 @@ package com.android.sample.tvmaze.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.android.sample.tvmaze.domain.Show
 
 /**
  * Data Access Object for the category table.

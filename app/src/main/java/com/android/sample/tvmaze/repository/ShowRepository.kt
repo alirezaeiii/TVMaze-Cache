@@ -7,11 +7,11 @@ import com.android.sample.tvmaze.database.asDomainModel
 import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.domain.asDatabaseModel
 import com.android.sample.tvmaze.network.TVMazeService
+import com.android.sample.tvmaze.util.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import retrofit2.await
-import timber.log.Timber
 
 class ShowRepository(
     private val showDao: ShowDao,
@@ -29,12 +29,13 @@ class ShowRepository(
     /**
      * Refresh the shows stored in the offline cache.
      */
-    suspend fun refreshShows() = withContext(Dispatchers.IO) {
+    suspend fun refreshShows(): Result<List<Show>> = withContext(Dispatchers.IO) {
         try {
             val news = api.fetchShowList().await()
             showDao.insertAll(*news.asDatabaseModel())
+            Result.Success(news)
         } catch (err: HttpException) {
-            Timber.e(err)
+            Result.Error(err)
         }
     }
 }
