@@ -75,6 +75,5 @@ fun <T, A> resultLiveData(databaseQuery: () -> LiveData<T>,
         val result = networkCall.invoke()
         if (result.status == Result.Status.ERROR) {
             emit(Result.error<T>(result.message!!))
-            emitSource(source)
         }
     }
