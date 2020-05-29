@@ -7,10 +7,11 @@ import com.android.sample.tvmaze.base.BaseActivity
 import com.android.sample.tvmaze.databinding.ActivityMainBinding
 import com.android.sample.tvmaze.util.Result
 import com.android.sample.tvmaze.util.applyExitMaterialTransform
+import com.android.sample.tvmaze.util.hide
+import com.android.sample.tvmaze.util.show
 import com.android.sample.tvmaze.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.viewmodel.ext.android.getViewModel
-import timber.log.Timber
 
 class MainActivity : BaseActivity() {
 
@@ -28,14 +29,19 @@ class MainActivity : BaseActivity() {
 
         viewModelAdapter = MainAdapter(this)
 
-        viewModel.shows.observe(this, Observer { shows ->
-            viewModelAdapter.submitList(shows)
-        })
-
-        viewModel.liveData.observe(this, Observer { result ->
-            if (result is Result.Error) {
-                Snackbar.make(binding.root, R.string.failed_loading_msg, Snackbar.LENGTH_LONG).show()
-                Timber.e(result.exception)
+        viewModel.shows.observe(this, Observer { result ->
+            when (result.status) {
+                Result.Status.SUCCESS -> {
+                    if (result.data?.isNotEmpty()!!) {
+                        binding.loadingSpinner.hide()
+                    }
+                    viewModelAdapter.submitList(result.data)
+                }
+                Result.Status.LOADING -> binding.loadingSpinner.show()
+                Result.Status.ERROR -> {
+                    binding.loadingSpinner.hide()
+                    Snackbar.make(binding.root, result.message!!, Snackbar.LENGTH_LONG).show()
+                }
             }
         })
 

@@ -1,41 +1,50 @@
 package com.android.sample.tvmaze.repository
 
-import androidx.lifecycle.LiveData
+import android.content.Context
 import androidx.lifecycle.Transformations
+import com.android.sample.tvmaze.R
 import com.android.sample.tvmaze.database.ShowDao
 import com.android.sample.tvmaze.database.asDomainModel
 import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.domain.asDatabaseModel
 import com.android.sample.tvmaze.network.TVMazeService
 import com.android.sample.tvmaze.util.Result
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.android.sample.tvmaze.util.isNetworkAvailable
+import com.android.sample.tvmaze.util.resultLiveData
 import retrofit2.HttpException
 import retrofit2.await
 
 class ShowRepository(
-    private val showDao: ShowDao,
-    private val api: TVMazeService
+    private val dao: ShowDao,
+    private val api: TVMazeService,
+    private val context: Context
 ) {
 
     /**
      * A list of shows that can be shown on the screen.
      */
-    val shows: LiveData<List<Show>> =
-        Transformations.map(showDao.getShows()) {
-            it.asDomainModel()
-        }
+    val shows = resultLiveData(
+        databaseQuery = {
+            Transformations.map(dao.getShows()) {
+                it.asDomainModel()
+            }
+        },
+        networkCall = { refreshShows() },
+        saveCallResult = { dao.insertAll(*it.asDatabaseModel()) })
 
     /**
      * Refresh the shows stored in the offline cache.
      */
-    suspend fun refreshShows(): Result<List<Show>> = withContext(Dispatchers.IO) {
-        try {
-            val news = api.fetchShowList().await()
-            showDao.insertAll(*news.asDatabaseModel())
-            Result.Success(news)
+    private suspend fun refreshShows(): Result<List<Show>> {
+        return try {
+            if (isNetworkAvailable(context)) {
+                val shows = api.fetchShowList().await()
+                Result.success(shows)
+            } else {
+                Result.error(context.getString(R.string.failed_loading_msg))
+            }
         } catch (err: HttpException) {
-            Result.Error(err)
+            Result.error(context.getString(R.string.failed_loading_msg))
         }
     }
 }

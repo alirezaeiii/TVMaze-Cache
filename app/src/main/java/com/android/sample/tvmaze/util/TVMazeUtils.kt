@@ -8,9 +8,13 @@ import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
+import androidx.lifecycle.map
 import com.google.android.material.transition.MaterialArcMotion
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialContainerTransformSharedElementCallback
+import kotlinx.coroutines.Dispatchers
 
 @Suppress("DEPRECATION")
 fun isNetworkAvailable(context: Context): Boolean {
@@ -60,3 +64,20 @@ internal fun getContentTransform(): MaterialContainerTransform {
         pathMotion = MaterialArcMotion()
     }
 }
+
+fun <T, A> resultLiveData(databaseQuery: () -> LiveData<T>,
+                          networkCall: suspend () -> Result<A>,
+                          saveCallResult: suspend (A) -> Unit): LiveData<Result<T>> =
+    liveData(Dispatchers.IO) {
+        emit(Result.loading<T>())
+        val source = databaseQuery.invoke().map { Result.success(it) }
+        emitSource(source)
+
+        val responseStatus = networkCall.invoke()
+        if (responseStatus.status == Result.Status.SUCCESS) {
+            saveCallResult(responseStatus.data!!)
+        } else if (responseStatus.status == Result.Status.ERROR) {
+            emit(Result.error<T>(responseStatus.message!!))
+            emitSource(source)
+        }
+    }
