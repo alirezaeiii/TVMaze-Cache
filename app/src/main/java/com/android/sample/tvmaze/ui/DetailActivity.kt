@@ -19,7 +19,7 @@ class DetailActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val showItem = intent.extras?.getParcelable<Show>(showKey)
+        val showItem = intent.extras?.getParcelable<Show>(SHOW_KEY)
         applyMaterialTransform(showItem?.name!!)
         binding.apply {
             show = showItem
@@ -35,11 +35,11 @@ class DetailActivity : BaseActivity() {
     }
 
     companion object {
-        private const val showKey = "posterKey"
+        private const val SHOW_KEY = "showKey"
         fun startActivityModel(context: Context?, startView: View, show: Show) {
             if (context is Activity) {
                 val intent = Intent(context, DetailActivity::class.java)
-                intent.putExtra(showKey, show)
+                    .putExtra(SHOW_KEY, show)
                 val options = ActivityOptions.makeSceneTransitionAnimation(
                     context,
                     startView, show.name

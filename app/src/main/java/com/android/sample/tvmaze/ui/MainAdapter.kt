@@ -18,7 +18,7 @@ class MainAdapter(
      * an item.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        MainViewHolder.from(parent, activity)
+        MainViewHolder.from(parent)
 
     /**
      * Called by RecyclerView to display the data at the specified position. This method should
@@ -26,19 +26,15 @@ class MainAdapter(
      * position.
      */
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), activity)
     }
 
     /**
      * ViewHolder for category items. All work is done by data binding.
      */
-    class MainViewHolder(
-        private val binding: ShowItemBinding,
-        private val activity: Activity
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
+    class MainViewHolder(private val binding: ShowItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Show) {
+        fun bind(item: Show, activity: Activity) {
             binding.root.setOnClickListener {
                 DetailActivity.startActivityModel(activity, binding.itemContainer, item)
             }
@@ -49,13 +45,13 @@ class MainAdapter(
         }
 
         companion object {
-            fun from(parent: ViewGroup, activity: Activity): MainViewHolder {
+            fun from(parent: ViewGroup): MainViewHolder {
                 val binding = ShowItemBinding.inflate(
                     parent.context.layoutInflater,
                     parent,
                     false
                 )
-                return MainViewHolder(binding, activity)
+                return MainViewHolder(binding)
             }
         }
     }

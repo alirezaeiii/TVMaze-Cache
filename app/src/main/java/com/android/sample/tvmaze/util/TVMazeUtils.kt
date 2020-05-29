@@ -66,17 +66,14 @@ internal fun getContentTransform(): MaterialContainerTransform {
 }
 
 fun <T, A> resultLiveData(databaseQuery: () -> LiveData<T>,
-                          networkCall: suspend () -> Result<A>,
-                          saveCallResult: suspend (A) -> Unit): LiveData<Result<T>> =
+                          networkCall: suspend () -> Result<A>): LiveData<Result<T>> =
     liveData(Dispatchers.IO) {
         emit(Result.loading<T>())
         val source = databaseQuery.invoke().map { Result.success(it) }
         emitSource(source)
 
         val result = networkCall.invoke()
-        if (result.status == Result.Status.SUCCESS) {
-            saveCallResult(result.data!!)
-        } else if (result.status == Result.Status.ERROR) {
+        if (result.status == Result.Status.ERROR) {
             emit(Result.error<T>(result.message!!))
             emitSource(source)
         }

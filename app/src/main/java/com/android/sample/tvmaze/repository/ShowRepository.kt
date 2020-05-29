@@ -29,8 +29,7 @@ class ShowRepository(
                 it.asDomainModel()
             }
         },
-        networkCall = { refreshShows() },
-        saveCallResult = { dao.insertAll(*it.asDatabaseModel()) })
+        networkCall = { refreshShows() })
 
     /**
      * Refresh the shows stored in the offline cache.
@@ -39,6 +38,7 @@ class ShowRepository(
         try {
             if (isNetworkAvailable(context)) {
                 val shows = api.fetchShowList().await()
+                dao.insertAll(*shows.asDatabaseModel())
                 Result.success(shows)
             } else {
                 Result.error(context.getString(R.string.failed_internet_msg))

@@ -45,10 +45,11 @@ class MainActivity : BaseActivity() {
             }
         })
 
+        binding.recyclerView.adapter = viewModelAdapter
+
         binding.apply {
             vm = viewModel
             lifecycleOwner = this@MainActivity
-            recyclerView.adapter = viewModelAdapter
         }
     }
 }
