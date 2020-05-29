@@ -35,16 +35,15 @@ class ShowRepository(
     /**
      * Refresh the shows stored in the offline cache.
      */
-    private suspend fun refreshShows(): Result<List<Show>> {
-        return try {
+    private suspend fun refreshShows(): Result<List<Show>> =
+        try {
             if (isNetworkAvailable(context)) {
                 val shows = api.fetchShowList().await()
                 Result.success(shows)
             } else {
-                Result.error(context.getString(R.string.failed_loading_msg))
+                Result.error(context.getString(R.string.failed_internet_msg))
             }
         } catch (err: HttpException) {
             Result.error(context.getString(R.string.failed_loading_msg))
         }
-    }
 }
