@@ -32,9 +32,7 @@ class MainActivity : BaseActivity() {
         viewModel.shows.observe(this, Observer { result ->
             when (result.status) {
                 Result.Status.SUCCESS -> {
-                    if (result.data?.isNotEmpty()!!) {
-                        binding.loadingSpinner.hide()
-                    }
+                    binding.loadingSpinner.hide()
                     viewModelAdapter.submitList(result.data)
                 }
                 Result.Status.LOADING -> binding.loadingSpinner.show()
