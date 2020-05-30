@@ -17,17 +17,13 @@ class MainActivity : BaseActivity() {
 
     private val binding: ActivityMainBinding by binding(R.layout.activity_main)
 
-    /**
-     * RecyclerView Adapter for converting a list of shows to cards.
-     */
-    private lateinit var viewModelAdapter: MainAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         applyExitMaterialTransform()
         super.onCreate(savedInstanceState)
         val viewModel = getViewModel<MainViewModel>()
 
-        viewModelAdapter = MainAdapter(this)
+        val viewModelAdapter = MainAdapter(this)
+        binding.recyclerView.adapter = viewModelAdapter
 
         viewModel.shows.observe(this, Observer { result ->
             when (result.status) {
@@ -42,8 +38,6 @@ class MainActivity : BaseActivity() {
                 }
             }
         })
-
-        binding.recyclerView.adapter = viewModelAdapter
 
         binding.apply {
             vm = viewModel
