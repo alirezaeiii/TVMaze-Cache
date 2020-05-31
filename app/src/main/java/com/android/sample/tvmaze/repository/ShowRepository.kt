@@ -13,6 +13,7 @@ import com.android.sample.tvmaze.util.isNetworkAvailable
 import com.android.sample.tvmaze.util.resultLiveData
 import retrofit2.HttpException
 import retrofit2.await
+import java.net.UnknownHostException
 
 class ShowRepository(
     private val dao: ShowDao,
@@ -45,5 +46,7 @@ class ShowRepository(
             }
         } catch (err: HttpException) {
             Result.error(context.getString(R.string.failed_loading_msg))
+        } catch (err: UnknownHostException) {
+            Result.error(context.getString(R.string.failed_host_msg))
         }
 }
