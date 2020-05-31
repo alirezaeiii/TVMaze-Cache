@@ -23,7 +23,7 @@ class ShowRepository(
     /**
      * A list of shows that can be shown on the screen.
      */
-    fun shows() = resultLiveData(
+    val shows = resultLiveData(
         databaseQuery = {
             Transformations.map(dao.getShows()) {
                 it.asDomainModel()
