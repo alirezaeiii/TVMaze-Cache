@@ -13,6 +13,7 @@ import com.android.sample.tvmaze.util.isNetworkAvailable
 import com.android.sample.tvmaze.util.resultLiveData
 import retrofit2.HttpException
 import retrofit2.await
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 class ShowRepository(
@@ -47,6 +48,8 @@ class ShowRepository(
         } catch (err: HttpException) {
             Result.error(context.getString(R.string.failed_loading_msg))
         } catch (err: UnknownHostException) {
-            Result.error(context.getString(R.string.failed_host_msg))
+            Result.error(context.getString(R.string.failed_unknown_host_msg))
+        } catch (err: SocketTimeoutException) {
+            Result.error(context.getString(R.string.failed_socket_timeout_msg))
         }
 }
