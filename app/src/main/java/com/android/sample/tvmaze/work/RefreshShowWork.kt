@@ -11,6 +11,10 @@ import org.koin.core.inject
 class RefreshShowWork(appContext: Context, params: WorkerParameters) :
     CoroutineWorker(appContext, params), KoinComponent {
 
+    companion object {
+        const val WORK_NAME = "RefreshShowWork"
+    }
+
     /**
      * A coroutine-friendly method to do your work.
      */

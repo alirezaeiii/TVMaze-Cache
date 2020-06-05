@@ -3,10 +3,7 @@
 package com.android.sample.tvmaze
 
 import android.app.Application
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import com.android.sample.tvmaze.di.networkModule
 import com.android.sample.tvmaze.di.persistenceModule
 import com.android.sample.tvmaze.di.repositoryModule
@@ -50,11 +47,14 @@ class TVMazeApplication : Application() {
             .setRequiresBatteryNotLow(true)
             .build()
 
-        val repeatingRequest
-                = PeriodicWorkRequestBuilder<RefreshShowWork>(1, TimeUnit.DAYS)
+        val repeatingRequest = PeriodicWorkRequestBuilder<RefreshShowWork>(1, TimeUnit.DAYS)
             .setConstraints(constraints)
             .build()
 
-        WorkManager.getInstance(this).enqueue(repeatingRequest)
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            RefreshShowWork.WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            repeatingRequest
+        )
     }
 }
