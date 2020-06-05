@@ -71,4 +71,10 @@ dependencies {
 
     // debugging
     implementation "com.jakewharton.timber:timber:$versions.timberVersion"
+
+    // WorkManager
+    implementation "androidx.work:work-runtime-ktx:$versions.workVersion"
+
+    // LeakCanary
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakcanaryVersion"
 }

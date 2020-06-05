@@ -35,6 +35,12 @@ ext.versions = [
         // debugging
         timberVersion       : '4.7.1',
 
+        // workManager
+        workVersion         : '2.3.4',
+
+        //leakCanary
+        leakcanaryVersion          : '2.3',
+
         // unit test
         junitVersion        : '4.12',
         androidxTest        : '1.1.0',

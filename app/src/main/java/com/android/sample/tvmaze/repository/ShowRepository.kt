@@ -8,7 +8,7 @@ import com.android.sample.tvmaze.database.asDomainModel
 import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.domain.asDatabaseModel
 import com.android.sample.tvmaze.network.TVMazeService
-import com.android.sample.tvmaze.util.Result
+import com.android.sample.tvmaze.util.MyResult
 import com.android.sample.tvmaze.util.isNetworkAvailable
 import com.android.sample.tvmaze.util.resultLiveData
 import retrofit2.HttpException
@@ -36,20 +36,20 @@ class ShowRepository(
     /**
      * Refresh the shows stored in the offline cache.
      */
-    private suspend fun refreshShows(): Result<List<Show>> =
+    suspend fun refreshShows(): MyResult<List<Show>> =
         try {
             if (isNetworkAvailable(context)) {
                 val shows = api.fetchShowList().await()
                 dao.insertAll(*shows.asDatabaseModel())
-                Result.success(shows)
+                MyResult.success(shows)
             } else {
-                Result.error(context.getString(R.string.failed_internet_msg))
+                MyResult.error(context.getString(R.string.failed_internet_msg))
             }
         } catch (err: HttpException) {
-            Result.error(context.getString(R.string.failed_loading_msg))
+            MyResult.error(context.getString(R.string.failed_loading_msg))
         } catch (err: UnknownHostException) {
-            Result.error(context.getString(R.string.failed_unknown_host_msg))
+            MyResult.error(context.getString(R.string.failed_unknown_host_msg))
         } catch (err: SocketTimeoutException) {
-            Result.error(context.getString(R.string.failed_socket_timeout_msg))
+            MyResult.error(context.getString(R.string.failed_socket_timeout_msg))
         }
 }
