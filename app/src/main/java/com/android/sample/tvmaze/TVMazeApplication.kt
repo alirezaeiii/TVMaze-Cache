@@ -3,6 +3,7 @@
 package com.android.sample.tvmaze
 
 import android.app.Application
+import android.os.Build
 import androidx.work.*
 import com.android.sample.tvmaze.di.networkModule
 import com.android.sample.tvmaze.di.persistenceModule
@@ -45,7 +46,11 @@ class TVMazeApplication : Application() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.UNMETERED)
             .setRequiresBatteryNotLow(true)
-            .build()
+            .apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    setRequiresDeviceIdle(true)
+                }
+            }.build()
 
         val repeatingRequest = PeriodicWorkRequestBuilder<RefreshShowWork>(1, TimeUnit.DAYS)
             .setConstraints(constraints)
