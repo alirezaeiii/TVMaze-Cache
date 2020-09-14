@@ -10,7 +10,7 @@ class MainViewModel(
     repository: ShowRepository
 ) : ViewModel() {
 
-    private val _shows = repository.shows
+    private val _shows = repository.shows()
     val shows: LiveData<MyResult<List<Show>>>
         get() = _shows
 }
