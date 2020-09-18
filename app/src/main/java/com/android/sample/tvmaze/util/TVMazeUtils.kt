@@ -41,7 +41,7 @@ internal fun getContentTransform(): MaterialContainerTransform {
 fun <T> resultLiveData(databaseQuery: () -> LiveData<T>,
                        networkCall: suspend () -> Resource<T>, contextProvider: CoroutineContextProvider
 ): LiveData<Resource<T>> =
-    liveData(contextProvider.IO) {
+    liveData(contextProvider.io) {
         emit(Resource.loading())
         val source = databaseQuery.invoke().map { Resource.success(it) }
         emitSource(source)

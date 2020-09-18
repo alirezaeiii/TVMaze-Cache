@@ -12,10 +12,7 @@ import com.android.sample.tvmaze.network.TVMazeService
 import com.android.sample.tvmaze.util.CoroutineContextProvider
 import com.android.sample.tvmaze.util.Resource
 import com.android.sample.tvmaze.util.resultLiveData
-import retrofit2.HttpException
 import retrofit2.await
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 
 class ShowRepository(
     private val dao: ShowDao,

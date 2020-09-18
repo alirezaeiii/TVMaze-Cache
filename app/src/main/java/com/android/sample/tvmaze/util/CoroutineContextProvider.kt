@@ -4,6 +4,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 
 open class CoroutineContextProvider {
-    open val Main: CoroutineContext = Dispatchers.Main
-    open val IO: CoroutineContext = Dispatchers.IO
+    open val main: CoroutineContext = Dispatchers.Main
+    open val io: CoroutineContext = Dispatchers.IO
 }

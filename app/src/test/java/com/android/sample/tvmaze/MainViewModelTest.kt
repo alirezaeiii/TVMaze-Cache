@@ -10,6 +10,7 @@ import com.android.sample.tvmaze.repository.ShowRepository
 import com.android.sample.tvmaze.util.Resource
 import com.android.sample.tvmaze.util.TestContextProvider
 import com.android.sample.tvmaze.viewmodel.MainViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
@@ -23,6 +24,7 @@ import retrofit2.Response
 import retrofit2.mock.Calls
 import java.lang.RuntimeException
 
+@ExperimentalCoroutinesApi
 class MainViewModelTest {
 
     @get:Rule
