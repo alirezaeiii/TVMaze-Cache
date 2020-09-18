@@ -40,6 +40,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     //Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
 
@@ -52,10 +53,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycleVersion"
     implementation "androidx.room:room-runtime:$versions.roomVersion"
     kapt "androidx.room:room-compiler:$versions.roomVersion"
-    // optional - Kotlin Extensions and Coroutines support for Room
+    // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$versions.roomVersion"
-    // optional - Test helpers
-    testImplementation "androidx.room:room-testing:$versions.roomVersion"
 
     // koin
     implementation "org.koin:koin-android:$versions.koinVersion"
@@ -89,6 +88,7 @@ dependencies {
 
     // Testing Architecture components
     testImplementation "androidx.arch.core:core-testing:$versions.androidxTest"
+    testImplementation "androidx.room:room-testing:$versions.roomVersion"
 
     // Dependencies for local unit tests
     testImplementation "org.mockito:mockito-core:$versions.mockitoVersion"
