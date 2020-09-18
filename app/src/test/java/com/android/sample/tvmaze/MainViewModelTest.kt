@@ -27,7 +27,7 @@ import retrofit2.mock.Calls
 class MainViewModelTest {
 
     @get:Rule
-    var rule: TestRule = InstantTaskExecutorRule()
+    val rule: TestRule = InstantTaskExecutorRule()
 
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
