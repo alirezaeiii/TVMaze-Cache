@@ -9,7 +9,7 @@ import com.android.sample.tvmaze.database.asDomainModel
 import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.domain.asDatabaseModel
 import com.android.sample.tvmaze.network.TVMazeService
-import com.android.sample.tvmaze.util.CoroutineContextProvider
+import com.android.sample.tvmaze.util.contextProvider.CoroutineContextProvider
 import com.android.sample.tvmaze.util.Resource
 import com.android.sample.tvmaze.util.resultLiveData
 import retrofit2.await

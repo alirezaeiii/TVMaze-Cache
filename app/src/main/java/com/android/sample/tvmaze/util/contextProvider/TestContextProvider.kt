@@ -1,5 +1,6 @@
-package com.android.sample.tvmaze.util
+package com.android.sample.tvmaze.util.contextProvider
 
+import com.android.sample.tvmaze.util.contextProvider.CoroutineContextProvider
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 
