@@ -17,8 +17,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import retrofit2.Response
 import retrofit2.mock.Calls
@@ -68,7 +67,7 @@ class MainViewModelTest {
     @Test
     fun givenServerResponseError_whenFetch_shouldReturnError() {
         val errorMsg = "error message"
-        `when`(context.getString(R.string.failed_loading_msg)).thenReturn(errorMsg)
+        `when`(context.getString(anyInt())).thenReturn(errorMsg)
         `when`(api.fetchShowList()).thenThrow(RuntimeException(""))
         `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
         val repository = ShowRepository(dao, api, context, TestContextProvider())
