@@ -54,8 +54,9 @@ class MainViewModelTest {
         `when`(api.fetchShowList()).thenReturn(Calls.response(Response.success(emptyList())))
         `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
         val repository = ShowRepository(dao, api, context, TestContextProvider())
-        val viewModel = MainViewModel(repository)
-        viewModel.shows.observeForever(resource)
+        val viewModel = MainViewModel(repository).apply {
+            shows.observeForever(resource)
+        }
         try {
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.success(emptyList()))
@@ -71,8 +72,9 @@ class MainViewModelTest {
         `when`(api.fetchShowList()).thenThrow(RuntimeException(""))
         `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
         val repository = ShowRepository(dao, api, context, TestContextProvider())
-        val viewModel = MainViewModel(repository)
-        viewModel.shows.observeForever(resource)
+        val viewModel = MainViewModel(repository).apply {
+            shows.observeForever(resource)
+        }
         try {
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.error(errorMsg))
