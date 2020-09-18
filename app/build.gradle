@@ -92,4 +92,6 @@ dependencies {
 
     // Dependencies for local unit tests
     testImplementation "org.mockito:mockito-core:$versions.mockitoVersion"
+    // mock extension function
+    testImplementation "io.mockk:mockk:$versions.mockkVersion"
 }

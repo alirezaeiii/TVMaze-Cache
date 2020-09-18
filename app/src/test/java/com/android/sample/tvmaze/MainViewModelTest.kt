@@ -9,7 +9,10 @@ import com.android.sample.tvmaze.network.TVMazeService
 import com.android.sample.tvmaze.repository.ShowRepository
 import com.android.sample.tvmaze.util.Resource
 import com.android.sample.tvmaze.util.contextProvider.TestContextProvider
+import com.android.sample.tvmaze.util.isNetworkAvailable
 import com.android.sample.tvmaze.viewmodel.MainViewModel
+import io.mockk.every
+import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
@@ -50,6 +53,10 @@ class MainViewModelTest {
 
     @Test
     fun givenServerResponse200_whenFetch_shouldReturnSuccess() {
+        mockkStatic("com.android.sample.tvmaze.util.ContextExtKt")
+        every {
+            context.isNetworkAvailable()
+        } returns true
         `when`(api.fetchShowList()).thenReturn(Calls.response(Response.success(emptyList())))
         `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
         val repository = ShowRepository(dao, api, context, TestContextProvider())
@@ -59,6 +66,27 @@ class MainViewModelTest {
         try {
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.success(emptyList()))
+        } finally {
+            viewModel.shows.removeObserver(resource)
+        }
+    }
+
+    @Test
+    fun givenNetworkUnAvailable_whenFetch_shouldReturnError() {
+        val errorMsg = "error message"
+        `when`(context.getString(anyInt())).thenReturn(errorMsg)
+        mockkStatic("com.android.sample.tvmaze.util.ContextExtKt")
+        every {
+            context.isNetworkAvailable()
+        } returns false
+        `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
+        val repository = ShowRepository(dao, api, context, TestContextProvider())
+        val viewModel = MainViewModel(repository).apply {
+            shows.observeForever(resource)
+        }
+        try {
+            verify(resource).onChanged(Resource.loading())
+            verify(resource).onChanged(Resource.error(errorMsg))
         } finally {
             viewModel.shows.removeObserver(resource)
         }

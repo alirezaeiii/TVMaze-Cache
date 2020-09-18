@@ -44,5 +44,6 @@ ext.versions = [
         // unit test
         junitVersion        : '4.12',
         androidxTest        : '2.1.0',
-        mockitoVersion      : '2.23.0'
+        mockitoVersion      : '2.23.0',
+        mockkVersion        : '1.10.0'
 ]
