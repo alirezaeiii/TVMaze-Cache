@@ -52,6 +52,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycleVersion"
     implementation "androidx.room:room-runtime:$versions.roomVersion"
     kapt "androidx.room:room-compiler:$versions.roomVersion"
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$versions.roomVersion"
+    // optional - Test helpers
+    testImplementation "androidx.room:room-testing:$versions.roomVersion"
 
     // koin
     implementation "org.koin:koin-android:$versions.koinVersion"
@@ -61,9 +65,11 @@ dependencies {
     // network
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttpVersion"
     implementation "com.squareup.retrofit2:converter-gson:$versions.retrofitVersion"
+    implementation "com.squareup.retrofit2:retrofit-mock:$versions.retrofitVersion"
 
     // coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutinesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutinesVersion"
 
     // glide
     implementation "com.github.bumptech.glide:glide:$versions.glideVersion"
@@ -77,4 +83,13 @@ dependencies {
 
     // LeakCanary
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakcanaryVersion"
+
+    //Junit
+    testImplementation "junit:junit:$versions.junitVersion"
+
+    // Testing Architecture components
+    testImplementation "androidx.arch.core:core-testing:$versions.androidxTest"
+
+    // Dependencies for local unit tests
+    testImplementation "org.mockito:mockito-core:$versions.mockitoVersion"
 }

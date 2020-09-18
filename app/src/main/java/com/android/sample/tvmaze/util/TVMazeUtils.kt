@@ -1,9 +1,5 @@
 package com.android.sample.tvmaze.util
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
@@ -14,29 +10,6 @@ import androidx.lifecycle.map
 import com.google.android.material.transition.MaterialArcMotion
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialContainerTransformSharedElementCallback
-import kotlinx.coroutines.Dispatchers
-
-@Suppress("DEPRECATION")
-fun isNetworkAvailable(context: Context): Boolean {
-    val connectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val nw = connectivityManager.activeNetwork ?: return false
-        val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
-        return when {
-            actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            //for other device how are able to connect with Ethernet
-            actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            //for check internet over Bluetooth
-            actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
-            else -> false
-        }
-    } else {
-        val nwInfo = connectivityManager.activeNetworkInfo ?: return false
-        return nwInfo.isConnected
-    }
-}
 
 /** apply material entered container transformation. */
 fun AppCompatActivity.applyMaterialTransform(transitionName: String) {
@@ -66,15 +39,16 @@ internal fun getContentTransform(): MaterialContainerTransform {
 }
 
 fun <T> resultLiveData(databaseQuery: () -> LiveData<T>,
-                          networkCall: suspend () -> MyResult<T>): LiveData<MyResult<T>> =
-    liveData(Dispatchers.IO) {
-        emit(MyResult.loading())
-        val source = databaseQuery.invoke().map { MyResult.success(it) }
+                       networkCall: suspend () -> Resource<T>, contextProvider: CoroutineContextProvider
+): LiveData<Resource<T>> =
+    liveData(contextProvider.IO) {
+        emit(Resource.loading())
+        val source = databaseQuery.invoke().map { Resource.success(it) }
         emitSource(source)
 
         val result = networkCall.invoke()
-        if (result.status == MyResult.Status.ERROR) {
-            emit(MyResult.error(result.message!!))
+        if (result.status == Resource.Status.ERROR) {
+            emit(Resource.error(result.message!!))
             emitSource(source)
         }
     }

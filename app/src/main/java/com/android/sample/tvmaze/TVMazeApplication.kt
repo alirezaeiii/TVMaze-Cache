@@ -5,10 +5,7 @@ package com.android.sample.tvmaze
 import android.app.Application
 import android.os.Build
 import androidx.work.*
-import com.android.sample.tvmaze.di.networkModule
-import com.android.sample.tvmaze.di.persistenceModule
-import com.android.sample.tvmaze.di.repositoryModule
-import com.android.sample.tvmaze.di.viewModelModule
+import com.android.sample.tvmaze.di.*
 import com.android.sample.tvmaze.work.RefreshShowWork
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +28,7 @@ class TVMazeApplication : Application() {
             modules(persistenceModule)
             modules(repositoryModule)
             modules(viewModelModule)
+            modules(ContextProviderModule)
         }
 
         if (BuildConfig.DEBUG) {

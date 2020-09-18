@@ -1,7 +1,7 @@
 package com.android.sample.tvmaze.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Data Access Object for the show table.
@@ -15,7 +15,7 @@ interface ShowDao {
      * @return all shows.
      */
     @Query("SELECT * FROM databaseshow")
-    fun getShows(): LiveData<List<DatabaseShow>>
+    fun getShows(): Flow<List<DatabaseShow>>
 
     /**
      * Insert shows in the database. If the show already exists, replace it.

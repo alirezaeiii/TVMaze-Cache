@@ -2,7 +2,4 @@
     <string name="app_name">TVMaze</string>
     <string name="database">shows.db</string>
     <string name="failed_loading_msg">Something went wrong to refresh Shows &#8230;</string>
-    <string name="failed_internet_msg">Internet is missing &#8230;</string>
-    <string name="failed_unknown_host_msg">Something went wrong to connect to server &#8230;</string>
-    <string name="failed_socket_timeout_msg">Timeout to connect to server &#8230;</string>
 </resources>

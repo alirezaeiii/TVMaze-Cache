@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer
 import com.android.sample.tvmaze.R
 import com.android.sample.tvmaze.base.BaseActivity
 import com.android.sample.tvmaze.databinding.ActivityMainBinding
-import com.android.sample.tvmaze.util.MyResult
+import com.android.sample.tvmaze.util.Resource
 import com.android.sample.tvmaze.util.applyExitMaterialTransform
 import com.android.sample.tvmaze.util.hide
 import com.android.sample.tvmaze.util.show
@@ -27,12 +27,12 @@ class MainActivity : BaseActivity() {
 
         viewModel.shows.observe(this, Observer { result ->
             when (result.status) {
-                MyResult.Status.SUCCESS -> {
+                Resource.Status.SUCCESS -> {
                     binding.loadingSpinner.hide()
                     viewModelAdapter.submitList(result.data)
                 }
-                MyResult.Status.LOADING -> binding.loadingSpinner.show()
-                MyResult.Status.ERROR -> {
+                Resource.Status.LOADING -> binding.loadingSpinner.show()
+                Resource.Status.ERROR -> {
                     binding.loadingSpinner.hide()
                     Snackbar.make(binding.root, result.message!!, Snackbar.LENGTH_LONG).show()
                 }
