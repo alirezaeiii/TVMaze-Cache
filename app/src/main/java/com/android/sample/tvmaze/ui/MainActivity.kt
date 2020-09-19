@@ -25,16 +25,16 @@ class MainActivity : BaseActivity() {
         val viewModelAdapter = MainAdapter(this)
         binding.recyclerView.adapter = viewModelAdapter
 
-        viewModel.shows.observe(this, Observer { result ->
-            when (result.status) {
+        viewModel.shows.observe(this, Observer { resource ->
+            when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     binding.loadingSpinner.hide()
-                    viewModelAdapter.submitList(result.data)
+                    viewModelAdapter.submitList(resource.data)
                 }
                 Resource.Status.LOADING -> binding.loadingSpinner.show()
                 Resource.Status.ERROR -> {
                     binding.loadingSpinner.hide()
-                    Snackbar.make(binding.root, result.message!!, Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(binding.root, resource.message!!, Snackbar.LENGTH_LONG).show()
                 }
             }
         })

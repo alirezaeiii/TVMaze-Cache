@@ -10,7 +10,7 @@ import androidx.databinding.ViewDataBinding
  * Do not modify this class. This is a first-level abstraction class.
  * If you want to add more specifications, make another class which extends [BaseActivity].
  */
-abstract class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity() {
 
     protected inline fun <reified T : ViewDataBinding> binding(
         @LayoutRes resId: Int
