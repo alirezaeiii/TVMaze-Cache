@@ -9,9 +9,8 @@ import com.android.sample.tvmaze.database.asDomainModel
 import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.domain.asDatabaseModel
 import com.android.sample.tvmaze.network.TVMazeService
-import com.android.sample.tvmaze.util.contextProvider.CoroutineContextProvider
 import com.android.sample.tvmaze.util.Resource
-import com.android.sample.tvmaze.util.isNetworkAvailable
+import com.android.sample.tvmaze.util.contextProvider.CoroutineContextProvider
 import com.android.sample.tvmaze.util.resultLiveData
 import retrofit2.await
 
@@ -31,7 +30,7 @@ class ShowRepository(
                 it.asDomainModel()
             }
         },
-        networkCall = { refreshShows() }, contextProvider = contextProvider
+        networkCall = { refreshShows() }, contextProvider = contextProvider, context = context
     )
 
     /**
@@ -39,13 +38,9 @@ class ShowRepository(
      */
     suspend fun refreshShows(): Resource<List<Show>> =
         try {
-            if (context.isNetworkAvailable()) {
-                val shows = api.fetchShowList().await()
-                dao.insertAll(*shows.asDatabaseModel())
-                Resource.success(shows)
-            } else {
-                Resource.error(context.getString(R.string.failed_network_msg))
-            }
+            val shows = api.fetchShowList().await()
+            dao.insertAll(*shows.asDatabaseModel())
+            Resource.success(shows)
         } catch (err: Exception) {
             Resource.error(context.getString(R.string.failed_loading_msg))
         }

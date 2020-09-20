@@ -1,5 +1,6 @@
 package com.android.sample.tvmaze.util
 
+import android.content.Context
 import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
+import com.android.sample.tvmaze.R
 import com.android.sample.tvmaze.util.contextProvider.CoroutineContextProvider
 import com.google.android.material.transition.MaterialArcMotion
 import com.google.android.material.transition.MaterialContainerTransform
@@ -39,15 +41,21 @@ internal fun getContentTransform(): MaterialContainerTransform {
     }
 }
 
-fun <T> resultLiveData(databaseQuery: () -> LiveData<T>,
-                       networkCall: suspend () -> Resource<T>, contextProvider: CoroutineContextProvider
+fun <T> resultLiveData(
+    databaseQuery: () -> LiveData<T>,
+    networkCall: suspend () -> Resource<T>, contextProvider: CoroutineContextProvider,
+    context: Context
 ): LiveData<Resource<T>> =
     liveData(contextProvider.io) {
         emit(Resource.loading())
         val source = databaseQuery.invoke().map { Resource.success(it) }
         emitSource(source)
 
-        val result = networkCall.invoke()
+        val result = if (context.isNetworkAvailable()) {
+            networkCall.invoke()
+        } else {
+            Resource.error(context.getString(R.string.failed_network_msg))
+        }
         if (result.status == Resource.Status.ERROR) {
             emit(Resource.error(result.message!!))
             emitSource(source)

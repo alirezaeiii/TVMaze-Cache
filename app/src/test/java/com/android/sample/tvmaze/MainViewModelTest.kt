@@ -96,6 +96,10 @@ class MainViewModelTest {
     fun givenServerResponseError_whenFetch_shouldReturnError() {
         val errorMsg = "error message"
         `when`(context.getString(anyInt())).thenReturn(errorMsg)
+        mockkStatic("com.android.sample.tvmaze.util.ContextExtKt")
+        every {
+            context.isNetworkAvailable()
+        } returns false
         `when`(api.fetchShowList()).thenThrow(RuntimeException(""))
         `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
         val repository = ShowRepository(dao, api, context, TestContextProvider())
