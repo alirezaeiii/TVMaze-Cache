@@ -1,10 +1,6 @@
 package com.android.sample.tvmaze.util
 
 import android.content.Context
-import android.view.View
-import android.view.Window
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
@@ -12,25 +8,6 @@ import com.android.sample.tvmaze.R
 import com.android.sample.tvmaze.util.contextProvider.CoroutineContextProvider
 import com.google.android.material.transition.MaterialArcMotion
 import com.google.android.material.transition.MaterialContainerTransform
-import com.google.android.material.transition.MaterialContainerTransformSharedElementCallback
-
-/** apply material entered container transformation. */
-fun AppCompatActivity.applyMaterialTransform(transitionName: String) {
-    window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
-    ViewCompat.setTransitionName(findViewById<View>(android.R.id.content), transitionName)
-
-    // set up shared element transition
-    setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
-    window.sharedElementEnterTransition = getContentTransform()
-    window.sharedElementReturnTransition = getContentTransform()
-}
-
-/** apply material exit container transformation. */
-fun AppCompatActivity.applyExitMaterialTransform() {
-    window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
-    setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
-    window.sharedElementsUseOverlay = false
-}
 
 /** get a material container arc transform. */
 internal fun getContentTransform(): MaterialContainerTransform {

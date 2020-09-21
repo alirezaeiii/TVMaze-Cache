@@ -5,10 +5,11 @@ import android.text.Html
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-
+import com.google.android.material.appbar.MaterialToolbar
 
 @BindingAdapter("loadImage")
 fun bindLoadImage(view: AppCompatImageView, url: String) {
@@ -23,6 +24,11 @@ fun TextView.bindText(url: String) {
     } else {
         Html.fromHtml(url)
     }
+}
+
+@BindingAdapter("simpleToolbarWithHome", "simpleToolbarTitle")
+fun bindToolbarWithTitle(toolbar: MaterialToolbar, activity: AppCompatActivity, title: String) {
+    activity.simpleToolbarWithHome(toolbar, title)
 }
 
 fun ProgressBar.hide() {
