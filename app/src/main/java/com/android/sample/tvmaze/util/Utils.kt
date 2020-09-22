@@ -10,7 +10,7 @@ import com.google.android.material.transition.MaterialArcMotion
 import com.google.android.material.transition.MaterialContainerTransform
 
 /** get a material container arc transform. */
-internal fun getContentTransform(): MaterialContainerTransform {
+fun getContentTransform(): MaterialContainerTransform {
     return MaterialContainerTransform().apply {
         addTarget(android.R.id.content)
         duration = 450
