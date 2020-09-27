@@ -99,7 +99,7 @@ class MainViewModelTest {
         mockkStatic("com.android.sample.tvmaze.util.ContextExtKt")
         every {
             context.isNetworkAvailable()
-        } returns false
+        } returns true
         `when`(api.fetchShowList()).thenThrow(RuntimeException(""))
         `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
         val repository = ShowRepository(dao, api, context, TestContextProvider())
