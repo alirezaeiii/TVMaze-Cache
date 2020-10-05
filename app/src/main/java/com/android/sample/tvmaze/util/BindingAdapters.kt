@@ -30,11 +30,3 @@ fun TextView.bindText(url: String) {
 fun bindToolbarWithTitle(toolbar: MaterialToolbar, activity: AppCompatActivity, title: String) {
     activity.simpleToolbarWithHome(toolbar, title)
 }
-
-fun ProgressBar.hide() {
-    visibility = View.GONE
-}
-
-fun ProgressBar.show() {
-    visibility = View.VISIBLE
-}
