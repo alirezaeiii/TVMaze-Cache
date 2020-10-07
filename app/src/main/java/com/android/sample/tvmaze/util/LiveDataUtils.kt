@@ -6,17 +6,6 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import com.android.sample.tvmaze.R
 import com.android.sample.tvmaze.util.contextProvider.CoroutineContextProvider
-import com.google.android.material.transition.MaterialArcMotion
-import com.google.android.material.transition.MaterialContainerTransform
-
-/** get a material container arc transform. */
-fun getContentTransform(): MaterialContainerTransform {
-    return MaterialContainerTransform().apply {
-        addTarget(android.R.id.content)
-        duration = 450
-        pathMotion = MaterialArcMotion()
-    }
-}
 
 fun <T> resultLiveData(
     databaseQuery: () -> LiveData<T>,

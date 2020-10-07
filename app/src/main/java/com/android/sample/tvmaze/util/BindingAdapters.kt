@@ -2,8 +2,6 @@ package com.android.sample.tvmaze.util
 
 import android.os.Build
 import android.text.Html
-import android.view.View
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
