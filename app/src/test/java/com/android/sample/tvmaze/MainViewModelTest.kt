@@ -19,6 +19,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import org.mockito.ArgumentCaptor
+import org.mockito.Captor
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
@@ -46,6 +48,9 @@ class MainViewModelTest {
     @Mock
     private lateinit var resource: Observer<Resource<List<Show>>>
 
+    @Captor
+    private lateinit var captor: ArgumentCaptor<Resource<List<Show>>>
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
@@ -64,6 +69,7 @@ class MainViewModelTest {
             shows.observeForever(resource)
         }
         try {
+            verify(resource, times(2)).onChanged(captor.capture())
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.success(emptyList()))
         } finally {
