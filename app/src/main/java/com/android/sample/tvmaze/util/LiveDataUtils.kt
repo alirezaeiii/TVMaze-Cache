@@ -9,7 +9,7 @@ import com.android.sample.tvmaze.util.contextProvider.CoroutineContextProvider
 
 fun <T> resultLiveData(
     databaseQuery: () -> LiveData<T>,
-    networkCall: suspend () -> Resource<T>, contextProvider: CoroutineContextProvider,
+    networkCall: suspend () -> Unit, contextProvider: CoroutineContextProvider,
     context: Context
 ): LiveData<Resource<T>> =
     liveData(contextProvider.io) {
@@ -17,12 +17,17 @@ fun <T> resultLiveData(
         val source = databaseQuery.invoke().map { Resource.success(it) }
         emitSource(source)
 
-        val result = if (context.isNetworkAvailable()) {
-            networkCall.invoke()
+        var result: Resource<T>? = null
+        if (context.isNetworkAvailable()) {
+            try {
+                networkCall.invoke()
+            } catch (err: Exception) {
+                result = Resource.error(context.getString(R.string.failed_loading_msg))
+            }
         } else {
-            Resource.error(context.getString(R.string.failed_network_msg))
+            result = Resource.error(context.getString(R.string.failed_network_msg))
         }
-        if (result.status == Resource.Status.ERROR) {
+        if (result?.status == Resource.Status.ERROR) {
             emit(Resource.error(result.message!!))
             emitSource(source)
         }

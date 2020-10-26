@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">TVMaze</string>
     <string name="database">shows.db</string>
-    <string name="failed_loading_msg">Something went wrong to refresh Shows &#8230;</string>
-    <string name="failed_network_msg">No Internet connection &#8230;</string>
+    <string name="failed_loading_msg">Something went wrong to refresh &#8230;</string>
+    <string name="failed_network_msg">No internet connection &#8230;</string>
 </resources>

@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.android.sample.tvmaze.repository.ShowRepository
-import com.android.sample.tvmaze.util.Resource
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -20,9 +19,11 @@ class RefreshShowWork(appContext: Context, params: WorkerParameters) :
      */
     override suspend fun doWork(): Result {
         val repository: ShowRepository by inject()
-        val result = repository.refreshShows()
-        return if (result.status == Resource.Status.SUCCESS)
+        return try {
+            repository.refreshShows()
             Result.success()
-        else Result.failure()
+        } catch (err : Exception) {
+            Result.failure()
+        }
     }
 }
