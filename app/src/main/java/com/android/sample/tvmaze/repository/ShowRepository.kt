@@ -1,15 +1,19 @@
 package com.android.sample.tvmaze.repository
 
 import android.content.Context
-import androidx.lifecycle.Transformations.map
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.android.sample.tvmaze.R
 import com.android.sample.tvmaze.database.ShowDao
 import com.android.sample.tvmaze.database.asDomainModel
+import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.domain.asDatabaseModel
 import com.android.sample.tvmaze.network.TVMazeService
+import com.android.sample.tvmaze.util.Resource
 import com.android.sample.tvmaze.util.contextProvider.CoroutineContextProvider
-import com.android.sample.tvmaze.util.resultLiveData
-import retrofit2.await
+import com.android.sample.tvmaze.util.isNetworkAvailable
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 
 class ShowRepository(
     private val dao: ShowDao,
@@ -18,23 +22,39 @@ class ShowRepository(
     private val contextProvider: CoroutineContextProvider
 ) {
 
-    /**
-     * A list of shows that can be shown on the screen.
-     */
-    fun shows() = resultLiveData(
-        databaseQuery = {
-            map(dao.getShows().asLiveData()) {
-                it.asDomainModel()
-            }
-        },
-        networkCall = { refreshShows() }, contextProvider = contextProvider, context = context
-    )
+    private val _shows = MutableLiveData<Resource<List<Show>>>()
+    val shows: LiveData<Resource<List<Show>>>
+        get() = _shows
 
-    /**
-     * Refresh the shows stored in the offline cache.
-     */
-    suspend fun refreshShows() {
-        val shows = api.fetchShowList().await()
-        dao.insertAll(*shows.asDatabaseModel())
+    @FlowPreview
+    suspend fun fetchShows() {
+        _shows.postValue(Resource.loading())
+        if (context.isNetworkAvailable()) {
+            dao.getShows().flatMapConcat { showsFromDb ->
+                if (showsFromDb.isEmpty()) {
+                    val apiShows = refreshShows()
+                    flow {
+                        emit(apiShows)
+                    }
+                } else {
+                    flow {
+                        emit(showsFromDb.asDomainModel())
+                    }
+                }
+            }.flowOn(contextProvider.io)
+                .catch {
+                    _shows.postValue(Resource.error(context.getString(R.string.failed_loading_msg)))
+                }.collect {
+                    _shows.postValue(Resource.success(it))
+                }
+        } else {
+            _shows.postValue(Resource.error(context.getString(R.string.failed_network_msg)))
+        }
+    }
+
+    suspend fun refreshShows(): List<Show> {
+        val apiShows = api.fetchShowList()
+        dao.insertAll(*apiShows.asDatabaseModel())
+        return apiShows
     }
 }

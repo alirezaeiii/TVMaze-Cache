@@ -22,7 +22,7 @@ class RefreshShowWork(appContext: Context, params: WorkerParameters) :
         return try {
             repository.refreshShows()
             Result.success()
-        } catch (err : Exception) {
+        } catch (err: Exception) {
             Result.failure()
         }
     }

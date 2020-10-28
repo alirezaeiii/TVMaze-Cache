@@ -25,8 +25,6 @@ import org.mockito.Captor
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
-import retrofit2.Response
-import retrofit2.mock.Calls
 
 @ExperimentalCoroutinesApi
 class MainViewModelTest {
@@ -63,12 +61,14 @@ class MainViewModelTest {
         every {
             context.isNetworkAvailable()
         } returns true
-        `when`(api.fetchShowList()).thenReturn(Calls.response(Response.success(emptyList())))
+        testCoroutineRule.runBlockingTest {
+            `when`(api.fetchShowList()).thenReturn(emptyList())
+        }
         `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
-        val repository = ShowRepository(dao, api, context, TestContextProvider())
-        val viewModel = MainViewModel(repository).apply {
+        val repository = ShowRepository(dao, api, context, TestContextProvider()).apply {
             shows.observeForever(resource)
         }
+        val viewModel = MainViewModel(repository)
         try {
             verify(resource, times(2)).onChanged(captor.capture())
             verify(resource).onChanged(Resource.loading())
@@ -87,11 +87,12 @@ class MainViewModelTest {
             context.isNetworkAvailable()
         } returns false
         `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
-        val repository = ShowRepository(dao, api, context, TestContextProvider())
-        val viewModel = MainViewModel(repository).apply {
+        val repository = ShowRepository(dao, api, context, TestContextProvider()).apply {
             shows.observeForever(resource)
         }
+        val viewModel = MainViewModel(repository)
         try {
+            verify(resource, times(2)).onChanged(captor.capture())
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.error(errorMsg))
         } finally {
@@ -107,13 +108,16 @@ class MainViewModelTest {
         every {
             context.isNetworkAvailable()
         } returns true
-        `when`(api.fetchShowList()).thenThrow(RuntimeException(""))
+        testCoroutineRule.runBlockingTest {
+            `when`(api.fetchShowList()).thenThrow(RuntimeException(""))
+        }
         `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
-        val repository = ShowRepository(dao, api, context, TestContextProvider())
-        val viewModel = MainViewModel(repository).apply {
+        val repository = ShowRepository(dao, api, context, TestContextProvider()).apply {
             shows.observeForever(resource)
         }
+        val viewModel = MainViewModel(repository)
         try {
+            verify(resource, times(2)).onChanged(captor.capture())
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.error(errorMsg))
         } finally {

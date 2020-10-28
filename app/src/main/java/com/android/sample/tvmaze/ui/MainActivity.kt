@@ -10,9 +10,10 @@ import com.android.sample.tvmaze.util.applyExitMaterialTransform
 import com.android.sample.tvmaze.util.hide
 import com.android.sample.tvmaze.util.show
 import com.android.sample.tvmaze.viewmodel.MainViewModel
-import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.viewmodel.ext.android.getViewModel
 
+@ExperimentalCoroutinesApi
 class MainActivity : BaseActivity() {
 
     private val binding: ActivityMainBinding by binding(R.layout.activity_main)
@@ -25,16 +26,27 @@ class MainActivity : BaseActivity() {
         val viewModelAdapter = MainAdapter(this)
         binding.recyclerView.adapter = viewModelAdapter
 
+        binding.retryButton.setOnClickListener {
+            viewModel.refreshShows()
+        }
+
         viewModel.shows.observe(this, Observer { resource ->
             when (resource.status) {
                 Resource.Status.SUCCESS -> {
                     binding.loadingSpinner.hide()
+                    binding.errorLayout.hide()
                     viewModelAdapter.submitList(resource.data)
                 }
-                Resource.Status.LOADING -> binding.loadingSpinner.show()
+                Resource.Status.LOADING -> {
+                    binding.loadingSpinner.show()
+                    binding.errorLayout.hide()
+                }
                 Resource.Status.ERROR -> {
                     binding.loadingSpinner.hide()
-                    Snackbar.make(binding.root, resource.message!!, Snackbar.LENGTH_LONG).show()
+                    if(viewModelAdapter.itemCount == 0) {
+                        binding.errorLayout.show()
+                        binding.errorMsg.text = resource.message
+                    }
                 }
             }
         })

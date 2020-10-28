@@ -42,6 +42,32 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
+        <LinearLayout
+            android:id="@+id/error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/error_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/retry_button"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Retry" />
+
+        </LinearLayout>
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
