@@ -32,7 +32,8 @@ class ShowRepository(
         if (context.isNetworkAvailable()) {
             dao.getShows().flatMapConcat { showsFromDb ->
                 if (showsFromDb.isEmpty()) {
-                    val apiShows = refreshShows()
+                    val apiShows = api.fetchShowList()
+                    dao.insertAll(*apiShows.asDatabaseModel())
                     flow {
                         emit(apiShows)
                     }
@@ -50,11 +51,5 @@ class ShowRepository(
         } else {
             _shows.value = Resource.error(context.getString(R.string.failed_network_msg))
         }
-    }
-
-    suspend fun refreshShows(): List<Show> {
-        val apiShows = api.fetchShowList()
-        dao.insertAll(*apiShows.asDatabaseModel())
-        return apiShows
     }
 }
