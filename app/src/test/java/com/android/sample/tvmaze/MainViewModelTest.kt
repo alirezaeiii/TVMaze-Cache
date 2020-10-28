@@ -3,6 +3,7 @@ package com.android.sample.tvmaze
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
 import com.android.sample.tvmaze.database.ShowDao
 import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.network.TVMazeService
@@ -15,6 +16,7 @@ import com.android.sample.tvmaze.viewmodel.MainViewModel
 import io.mockk.every
 import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
@@ -26,6 +28,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 class MainViewModelTest {
 
@@ -66,15 +69,16 @@ class MainViewModelTest {
         }
         `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
         val repository = ShowRepository(dao, api, context, TestContextProvider()).apply {
-            shows.observeForever(resource)
+            shows.asLiveData().observeForever(resource)
         }
         val viewModel = MainViewModel(repository)
         try {
-            verify(resource, times(2)).onChanged(captor.capture())
+            verify(resource, times(3)).onChanged(captor.capture())
+            verify(resource).onChanged(Resource.idle())
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.success(emptyList()))
         } finally {
-            viewModel.shows.removeObserver(resource)
+            viewModel.shows.asLiveData().removeObserver(resource)
         }
     }
 
@@ -88,15 +92,17 @@ class MainViewModelTest {
         } returns false
         `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
         val repository = ShowRepository(dao, api, context, TestContextProvider()).apply {
-            shows.observeForever(resource)
+            shows.asLiveData().observeForever(resource)
         }
         val viewModel = MainViewModel(repository)
         try {
-            verify(resource, times(2)).onChanged(captor.capture())
+            verify(resource).onChanged(Resource.idle())
+            verify(resource, times(3)).onChanged(captor.capture())
+            verify(resource).onChanged(Resource.idle())
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.error(errorMsg))
         } finally {
-            viewModel.shows.removeObserver(resource)
+            viewModel.shows.asLiveData().removeObserver(resource)
         }
     }
 
@@ -113,15 +119,16 @@ class MainViewModelTest {
         }
         `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
         val repository = ShowRepository(dao, api, context, TestContextProvider()).apply {
-            shows.observeForever(resource)
+            shows.asLiveData().observeForever(resource)
         }
         val viewModel = MainViewModel(repository)
         try {
-            verify(resource, times(2)).onChanged(captor.capture())
+            verify(resource, times(3)).onChanged(captor.capture())
+            verify(resource).onChanged(Resource.idle())
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.error(errorMsg))
         } finally {
-            viewModel.shows.removeObserver(resource)
+            viewModel.shows.asLiveData().removeObserver(resource)
         }
     }
 }
