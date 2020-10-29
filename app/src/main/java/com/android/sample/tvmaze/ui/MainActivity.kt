@@ -48,10 +48,8 @@ class MainActivity : BaseActivity() {
                     }
                     Resource.Status.ERROR -> {
                         binding.loadingSpinner.hide()
-                        if (viewModelAdapter.itemCount == 0) {
-                            binding.errorLayout.show()
-                            binding.errorMsg.text = resource.message
-                        }
+                        binding.errorLayout.show()
+                        binding.errorMsg.text = resource.message
                     }
                     Resource.Status.IDLE -> {
                     }
