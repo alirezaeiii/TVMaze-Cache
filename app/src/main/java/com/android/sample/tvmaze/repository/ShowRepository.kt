@@ -31,25 +31,27 @@ class ShowRepository(
         _shows.value = Resource.loading()
         dao.getShows().flatMapConcat { showsFromDb ->
             if (showsFromDb.isEmpty()) {
-                val apiShows = api.fetchShowList()
-                dao.insertAll(*apiShows.asDatabaseModel())
-                flow {
-                    emit(apiShows)
+                if (context.isNetworkAvailable()) {
+                    val apiShows = api.fetchShowList()
+                    dao.insertAll(*apiShows.asDatabaseModel())
+                    flow {
+                        emit(Resource.success(apiShows))
+                    }
+                } else {
+                    flow {
+                        emit(Resource.error(context.getString(R.string.failed_network_msg)))
+                    }
                 }
             } else {
                 flow {
-                    emit(showsFromDb.asDomainModel())
+                    emit(Resource.success(showsFromDb.asDomainModel()))
                 }
             }
         }.flowOn(contextProvider.io)
             .catch {
-                _shows.value = if (context.isNetworkAvailable()) {
-                    Resource.error(context.getString(R.string.failed_loading_msg))
-                } else {
-                    Resource.error(context.getString(R.string.failed_network_msg))
-                }
+                _shows.value = Resource.error(context.getString(R.string.failed_loading_msg))
             }.collect {
-                _shows.value = Resource.success(it)
+                _shows.value = it
             }
     }
 }
