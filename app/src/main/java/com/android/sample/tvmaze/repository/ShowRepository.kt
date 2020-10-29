@@ -29,27 +29,27 @@ class ShowRepository(
     @FlowPreview
     suspend fun fetchShows() {
         _shows.value = Resource.loading()
-        if (context.isNetworkAvailable()) {
-            dao.getShows().flatMapConcat { showsFromDb ->
-                if (showsFromDb.isEmpty()) {
-                    val apiShows = api.fetchShowList()
-                    dao.insertAll(*apiShows.asDatabaseModel())
-                    flow {
-                        emit(apiShows)
-                    }
+        dao.getShows().flatMapConcat { showsFromDb ->
+            if (showsFromDb.isEmpty()) {
+                val apiShows = api.fetchShowList()
+                dao.insertAll(*apiShows.asDatabaseModel())
+                flow {
+                    emit(apiShows)
+                }
+            } else {
+                flow {
+                    emit(showsFromDb.asDomainModel())
+                }
+            }
+        }.flowOn(contextProvider.io)
+            .catch {
+                _shows.value = if (context.isNetworkAvailable()) {
+                    Resource.error(context.getString(R.string.failed_loading_msg))
                 } else {
-                    flow {
-                        emit(showsFromDb.asDomainModel())
-                    }
+                    Resource.error(context.getString(R.string.failed_network_msg))
                 }
-            }.flowOn(contextProvider.io)
-                .catch {
-                    _shows.value = Resource.error(context.getString(R.string.failed_loading_msg))
-                }.collect {
-                    _shows.value = Resource.success(it)
-                }
-        } else {
-            _shows.value = Resource.error(context.getString(R.string.failed_network_msg))
-        }
+            }.collect {
+                _shows.value = Resource.success(it)
+            }
     }
 }
