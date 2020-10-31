@@ -96,7 +96,6 @@ class MainViewModelTest {
         }
         val viewModel = MainViewModel(repository)
         try {
-            verify(resource).onChanged(Resource.idle())
             verify(resource, times(3)).onChanged(captor.capture())
             verify(resource).onChanged(Resource.idle())
             verify(resource).onChanged(Resource.loading())
