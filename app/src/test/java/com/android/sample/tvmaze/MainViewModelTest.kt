@@ -17,7 +17,6 @@ import io.mockk.every
 import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -66,8 +65,8 @@ class MainViewModelTest {
         } returns true
         testCoroutineRule.runBlockingTest {
             `when`(api.fetchShowList()).thenReturn(emptyList())
+            `when`(dao.getShows()).thenReturn(emptyList())
         }
-        `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
         val repository = ShowRepository(dao, api, context, TestContextProvider()).apply {
             shows.asLiveData().observeForever(resource)
         }
@@ -90,7 +89,9 @@ class MainViewModelTest {
         every {
             context.isNetworkAvailable()
         } returns false
-        `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
+        testCoroutineRule.runBlockingTest {
+            `when`(dao.getShows()).thenReturn(emptyList())
+        }
         val repository = ShowRepository(dao, api, context, TestContextProvider()).apply {
             shows.asLiveData().observeForever(resource)
         }
@@ -115,8 +116,8 @@ class MainViewModelTest {
         } returns true
         testCoroutineRule.runBlockingTest {
             `when`(api.fetchShowList()).thenThrow(RuntimeException(""))
+            `when`(dao.getShows()).thenReturn(emptyList())
         }
-        `when`(dao.getShows()).thenReturn(flowOf(emptyList()))
         val repository = ShowRepository(dao, api, context, TestContextProvider()).apply {
             shows.asLiveData().observeForever(resource)
         }

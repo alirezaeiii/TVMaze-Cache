@@ -1,7 +1,6 @@
 package com.android.sample.tvmaze.database
 
 import androidx.room.*
-import kotlinx.coroutines.flow.Flow
 
 /**
  * Data Access Object for the show table.
@@ -15,7 +14,7 @@ interface ShowDao {
      * @return all shows.
      */
     @Query("SELECT * FROM databaseshow")
-    fun getShows(): Flow<List<DatabaseShow>>
+    suspend fun getShows(): List<DatabaseShow>
 
     /**
      * Insert shows in the database. If the show already exists, replace it.
@@ -23,7 +22,7 @@ interface ShowDao {
      * @param shows the shows to be inserted.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg shows: DatabaseShow)
+    suspend fun insertAll(vararg shows: DatabaseShow)
 }
 
 @Database(entities = [DatabaseShow::class], version = 1, exportSchema = false)

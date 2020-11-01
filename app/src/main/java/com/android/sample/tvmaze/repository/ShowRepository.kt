@@ -13,6 +13,7 @@ import com.android.sample.tvmaze.util.isNetworkAvailable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class ShowRepository(
@@ -29,12 +30,12 @@ class ShowRepository(
     @FlowPreview
     suspend fun fetchShows() {
         _shows.value = Resource.loading()
-        dao.getShows().flatMapConcat { showsFromDb ->
+        dao.getShows().let { showsFromDb ->
             if (showsFromDb.isEmpty()) {
                 if (context.isNetworkAvailable()) {
-                    val apiShows = api.fetchShowList()
-                    dao.insertAll(*apiShows.asDatabaseModel())
                     flow {
+                        val apiShows = api.fetchShowList()
+                        dao.insertAll(*apiShows.asDatabaseModel())
                         emit(Resource.success(apiShows))
                     }
                 } else {
@@ -45,6 +46,11 @@ class ShowRepository(
             } else {
                 flow {
                     emit(Resource.success(showsFromDb.asDomainModel()))
+                    try {
+                        refreshShows()
+                    } catch (err: Exception) {
+                        Timber.e(err)
+                    }
                 }
             }
         }.flowOn(contextProvider.io)
@@ -53,5 +59,10 @@ class ShowRepository(
             }.collect {
                 _shows.value = it
             }
+    }
+
+    suspend fun refreshShows() {
+        val apiShows = api.fetchShowList()
+        dao.insertAll(*apiShows.asDatabaseModel())
     }
 }
