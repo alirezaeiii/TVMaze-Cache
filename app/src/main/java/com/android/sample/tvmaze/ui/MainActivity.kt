@@ -15,6 +15,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.getViewModel
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class MainActivity : BaseActivity() {
@@ -38,20 +39,24 @@ class MainActivity : BaseActivity() {
             viewModel.shows.collect { resource ->
                 when (resource.status) {
                     Resource.Status.SUCCESS -> {
+                        Timber.d("S")
                         binding.loadingSpinner.hide()
                         binding.errorLayout.hide()
                         viewModelAdapter.submitList(resource.data)
                     }
                     Resource.Status.LOADING -> {
+                        Timber.d("L")
                         binding.loadingSpinner.show()
                         binding.errorLayout.hide()
                     }
                     Resource.Status.ERROR -> {
+                        Timber.d("E")
                         binding.loadingSpinner.hide()
                         binding.errorLayout.show()
                         binding.errorMsg.text = resource.message
                     }
                     Resource.Status.UPDATE -> {
+                        Timber.d("U")
                         viewModelAdapter.submitList(resource.data)
                     }
                     Resource.Status.IDLE -> {

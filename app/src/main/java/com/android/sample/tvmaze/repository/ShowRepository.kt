@@ -31,19 +31,15 @@ class ShowRepository(
     suspend fun fetchShows() {
         _shows.value = Resource.loading()
         dao.getShows().let { showsFromDb ->
-            if (showsFromDb.isEmpty()) {
-                if (context.isNetworkAvailable()) {
-                    flow {
+            flow {
+                if (showsFromDb.isEmpty()) {
+                    if (context.isNetworkAvailable()) {
                         val apiShows = getRefreshedShows()
                         emit(Resource.success(apiShows))
-                    }
-                } else {
-                    flow {
+                    } else {
                         emit(Resource.error(context.getString(R.string.failed_network_msg)))
                     }
-                }
-            } else {
-                flow {
+                } else {
                     emit(Resource.success(showsFromDb.asDomainModel()))
                     try {
                         val apiShows = getRefreshedShows()
