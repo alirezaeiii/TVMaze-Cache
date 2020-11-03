@@ -34,7 +34,7 @@ class ShowRepository(
             if (showsFromDb.isEmpty()) {
                 if (context.isNetworkAvailable()) {
                     flow {
-                        val apiShows = refreshShows()
+                        val apiShows = getRefreshedShows()
                         emit(Resource.success(apiShows))
                     }
                 } else {
@@ -46,8 +46,8 @@ class ShowRepository(
                 flow {
                     emit(Resource.success(showsFromDb.asDomainModel()))
                     try {
-                        val apiShows = refreshShows()
-                        emit(Resource.success(apiShows))
+                        val apiShows = getRefreshedShows()
+                        emit(Resource.update(apiShows))
                     } catch (err: Exception) {
                         Timber.e(err)
                     }
@@ -61,7 +61,7 @@ class ShowRepository(
             }
     }
 
-    suspend fun refreshShows() : List<Show> {
+    suspend fun getRefreshedShows(): List<Show> {
         val apiShows = api.fetchShowList()
         dao.insertAll(*apiShows.asDatabaseModel())
         return apiShows

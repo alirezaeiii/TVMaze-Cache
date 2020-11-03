@@ -51,6 +51,9 @@ class MainActivity : BaseActivity() {
                         binding.errorLayout.show()
                         binding.errorMsg.text = resource.message
                     }
+                    Resource.Status.UPDATE -> {
+                        viewModelAdapter.submitList(resource.data)
+                    }
                     Resource.Status.IDLE -> {
                     }
                 }
