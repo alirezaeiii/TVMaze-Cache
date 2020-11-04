@@ -14,7 +14,8 @@ data class Resource<out T>(val status: Status, val data: T?, val message: String
         ERROR,
         LOADING,
         IDLE,
-        UPDATE
+        UPDATE,
+        WARNING
     }
 
     companion object {
@@ -36,6 +37,10 @@ data class Resource<out T>(val status: Status, val data: T?, val message: String
 
         fun <T> update(data: T): Resource<T> {
             return Resource(Status.UPDATE, data, null)
+        }
+
+        fun <T> warning(message: String): Resource<T> {
+            return Resource(Status.WARNING, null, message)
         }
     }
 }

@@ -10,6 +10,7 @@ import com.android.sample.tvmaze.util.applyExitMaterialTransform
 import com.android.sample.tvmaze.util.hide
 import com.android.sample.tvmaze.util.show
 import com.android.sample.tvmaze.viewmodel.MainViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
@@ -53,6 +54,9 @@ class MainActivity : BaseActivity() {
                     }
                     Resource.Status.UPDATE -> {
                         viewModelAdapter.submitList(resource.data)
+                    }
+                    Resource.Status.WARNING -> {
+                        Snackbar.make(binding.root, resource.message!!, Snackbar.LENGTH_LONG).show()
                     }
                     Resource.Status.IDLE -> {
                     }

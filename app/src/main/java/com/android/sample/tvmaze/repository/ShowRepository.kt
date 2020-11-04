@@ -13,7 +13,6 @@ import com.android.sample.tvmaze.util.isNetworkAvailable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
-import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class ShowRepository(
@@ -45,7 +44,7 @@ class ShowRepository(
                         val apiShows = getRefreshedShows()
                         emit(Resource.update(apiShows))
                     } catch (err: Exception) {
-                        Timber.e(err)
+                        emit(Resource.warning(context.getString(R.string.failed_refresh_msg)))
                     }
                 }
             }
