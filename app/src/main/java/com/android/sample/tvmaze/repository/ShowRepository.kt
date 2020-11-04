@@ -33,7 +33,7 @@ class ShowRepository(
             flow {
                 if (showsFromDb.isEmpty()) {
                     if (context.isNetworkAvailable()) {
-                        val apiShows = getRefreshedShows()
+                        val apiShows = getLatestShows()
                         emit(Resource.success(apiShows))
                     } else {
                         emit(Resource.error(context.getString(R.string.failed_network_msg)))
@@ -41,7 +41,7 @@ class ShowRepository(
                 } else {
                     emit(Resource.success(showsFromDb.asDomainModel()))
                     try {
-                        val apiShows = getRefreshedShows()
+                        val apiShows = getLatestShows()
                         emit(Resource.update(apiShows))
                     } catch (err: Exception) {
                         emit(Resource.warning(context.getString(R.string.failed_refresh_msg)))
@@ -56,7 +56,7 @@ class ShowRepository(
             }
     }
 
-    suspend fun getRefreshedShows(): List<Show> {
+    suspend fun getLatestShows(): List<Show> {
         val apiShows = api.fetchShowList()
         dao.insertAll(*apiShows.asDatabaseModel())
         return apiShows

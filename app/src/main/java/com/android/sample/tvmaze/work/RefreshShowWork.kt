@@ -20,7 +20,7 @@ class RefreshShowWork(appContext: Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
         val repository: ShowRepository by inject()
         return try {
-            repository.getRefreshedShows()
+            repository.getLatestShows()
             Result.success()
         } catch (err: Exception) {
             Result.failure()
