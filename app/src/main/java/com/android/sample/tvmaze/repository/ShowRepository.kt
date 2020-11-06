@@ -40,11 +40,15 @@ class ShowRepository(
                     }
                 } else {
                     emit(Resource.success(showsFromDb.asDomainModel()))
-                    try {
-                        val apiShows = getLatestShows()
-                        emit(Resource.update(apiShows))
-                    } catch (err: Exception) {
-                        emit(Resource.warning(context.getString(R.string.failed_refresh_msg)))
+                    if (context.isNetworkAvailable()) {
+                        try {
+                            val apiShows = getLatestShows()
+                            emit(Resource.update(apiShows))
+                        } catch (err: Exception) {
+                            emit(Resource.warning(context.getString(R.string.failed_refresh_msg)))
+                        }
+                    } else {
+                        emit(Resource.warning(context.getString(R.string.failed_network_msg)))
                     }
                 }
             }
