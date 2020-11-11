@@ -13,6 +13,7 @@ import com.android.sample.tvmaze.util.isNetworkAvailable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class ShowRepository(
@@ -40,15 +41,11 @@ class ShowRepository(
                     }
                 } else {
                     emit(Resource.success(showsFromDb.asDomainModel()))
-                    if (context.isNetworkAvailable()) {
-                        try {
-                            val apiShows = getLatestShows()
-                            emit(Resource.update(apiShows))
-                        } catch (err: Exception) {
-                            emit(Resource.warning(context.getString(R.string.failed_refresh_msg)))
-                        }
-                    } else {
-                        emit(Resource.warning(context.getString(R.string.failed_network_msg)))
+                    try {
+                        val apiShows = getLatestShows()
+                        emit(Resource.update(apiShows))
+                    } catch (err: Exception) {
+                        Timber.e(err)
                     }
                 }
             }
