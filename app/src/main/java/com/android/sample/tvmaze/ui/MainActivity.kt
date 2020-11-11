@@ -54,9 +54,6 @@ class MainActivity : BaseActivity() {
                     Resource.Status.UPDATE -> {
                         viewModelAdapter.submitList(resource.data)
                     }
-                    Resource.Status.WARNING -> {
-                        Snackbar.make(binding.root, resource.message!!, Snackbar.LENGTH_LONG).show()
-                    }
                     Resource.Status.IDLE -> {
                     }
                 }
