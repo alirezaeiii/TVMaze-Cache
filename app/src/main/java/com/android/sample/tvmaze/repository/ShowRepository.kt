@@ -11,7 +11,6 @@ import com.android.sample.tvmaze.util.Resource
 import com.android.sample.tvmaze.util.contextProvider.CoroutineContextProvider
 import com.android.sample.tvmaze.util.isNetworkAvailable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 
@@ -27,14 +26,14 @@ class ShowRepository(
     val shows: StateFlow<Resource<List<Show>>>
         get() = _shows
 
-    @FlowPreview
     suspend fun fetchShows() {
         _shows.value = Resource.loading()
         dao.getShows().let { showsFromDb ->
             flow {
                 if (showsFromDb.isEmpty()) {
                     if (context.isNetworkAvailable()) {
-                        val apiShows = getLatestShows()
+                        val apiShows = api.fetchShowList()
+                        dao.insertAll(*apiShows.asDatabaseModel())
                         emit(Resource.success(apiShows))
                     } else {
                         emit(Resource.error(context.getString(R.string.failed_network_msg)))
@@ -42,8 +41,9 @@ class ShowRepository(
                 } else {
                     emit(Resource.success(showsFromDb.asDomainModel()))
                     try {
-                        val apiShows = getLatestShows()
-                        emit(Resource.update(apiShows))
+                        val apiShows = api.fetchShowList()
+                        dao.insertAll(*apiShows.asDatabaseModel())
+                        emit(Resource.success(apiShows))
                     } catch (err: Exception) {
                         Timber.e(err)
                     }
@@ -55,11 +55,5 @@ class ShowRepository(
             }.collect {
                 _shows.value = it
             }
-    }
-
-    suspend fun getLatestShows(): List<Show> {
-        val apiShows = api.fetchShowList()
-        dao.insertAll(*apiShows.asDatabaseModel())
-        return apiShows
     }
 }

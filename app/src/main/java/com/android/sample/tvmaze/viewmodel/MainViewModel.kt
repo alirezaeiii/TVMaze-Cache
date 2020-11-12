@@ -6,12 +6,10 @@ import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.repository.ShowRepository
 import com.android.sample.tvmaze.util.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-@FlowPreview
 class MainViewModel(
     private val repository: ShowRepository
 ) : ViewModel() {

@@ -16,7 +16,6 @@ import com.android.sample.tvmaze.viewmodel.MainViewModel
 import io.mockk.every
 import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,7 +26,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
-@FlowPreview
 @ExperimentalCoroutinesApi
 class MainViewModelTest {
 
