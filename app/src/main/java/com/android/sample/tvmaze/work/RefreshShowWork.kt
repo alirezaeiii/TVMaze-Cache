@@ -21,11 +21,9 @@ class RefreshShowWork(appContext: Context, params: WorkerParameters) :
      * A coroutine-friendly method to do your work.
      */
     override suspend fun doWork(): Result {
-        val api: TVMazeService by inject()
-        val dao: ShowDao by inject()
+        val repository: ShowRepository by inject()
         return try {
-            val apiShows = api.fetchShowList()
-            dao.insertAll(*apiShows.asDatabaseModel())
+            repository.refreshLocalDataSource()
             Result.success()
         } catch (err: Exception) {
             Result.failure()

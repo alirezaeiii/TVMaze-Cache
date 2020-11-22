@@ -32,18 +32,14 @@ class ShowRepository(
             flow {
                 if (showsFromDb.isEmpty()) {
                     if (context.isNetworkAvailable()) {
-                        val apiShows = api.fetchShowList()
-                        dao.insertAll(*apiShows.asDatabaseModel())
-                        emit(Resource.success(apiShows))
+                        emit(Resource.success(refreshLocalDataSource()))
                     } else {
                         emit(Resource.error(context.getString(R.string.failed_network_msg)))
                     }
                 } else {
                     emit(Resource.success(showsFromDb.asDomainModel()))
                     try {
-                        val apiShows = api.fetchShowList()
-                        dao.insertAll(*apiShows.asDatabaseModel())
-                        emit(Resource.success(apiShows))
+                        emit(Resource.success(refreshLocalDataSource()))
                     } catch (err: Exception) {
                         Timber.e(err)
                     }
@@ -55,5 +51,11 @@ class ShowRepository(
             }.collect {
                 _shows.value = it
             }
+    }
+
+    suspend fun refreshLocalDataSource() : List<Show> {
+        val apiShows = api.fetchShowList()
+        dao.insertAll(*apiShows.asDatabaseModel())
+        return apiShows
     }
 }
