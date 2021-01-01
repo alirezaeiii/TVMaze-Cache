@@ -1,4 +1,4 @@
-package com.android.sample.tvmaze
+package com.android.sample.tvmaze.viewmodel
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -9,10 +9,9 @@ import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.network.TVMazeService
 import com.android.sample.tvmaze.repository.ShowRepository
 import com.android.sample.tvmaze.util.Resource
-import com.android.sample.tvmaze.util.TestCoroutineRule
+import com.android.sample.tvmaze.TestCoroutineRule
 import com.android.sample.tvmaze.util.contextProvider.TestContextProvider
 import com.android.sample.tvmaze.util.isNetworkAvailable
-import com.android.sample.tvmaze.viewmodel.MainViewModel
 import io.mockk.every
 import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi

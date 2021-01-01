@@ -1,4 +1,4 @@
-package com.android.sample.tvmaze.util
+package com.android.sample.tvmaze
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
