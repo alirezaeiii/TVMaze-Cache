@@ -48,8 +48,6 @@ class MainActivity : BaseActivity() {
                         binding.errorLayout.show()
                         binding.errorMsg.text = resource.message
                     }
-                    Resource.Status.IDLE -> {
-                    }
                 }
             }
         }

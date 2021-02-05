@@ -1,4 +1,4 @@
-package com.android.sample.tvmaze.viewmodel
+package com.android.sample.tvmaze
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -9,9 +9,9 @@ import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.network.TVMazeService
 import com.android.sample.tvmaze.repository.ShowRepository
 import com.android.sample.tvmaze.util.Resource
-import com.android.sample.tvmaze.TestCoroutineRule
 import com.android.sample.tvmaze.util.contextProvider.TestContextProvider
 import com.android.sample.tvmaze.util.isNetworkAvailable
+import com.android.sample.tvmaze.viewmodel.MainViewModel
 import io.mockk.every
 import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -69,8 +69,7 @@ class MainViewModelTest {
         }
         val viewModel = MainViewModel(repository)
         try {
-            verify(resource, times(3)).onChanged(captor.capture())
-            verify(resource).onChanged(Resource.idle())
+            verify(resource, times(2)).onChanged(captor.capture())
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.success(emptyList()))
         } finally {
@@ -94,8 +93,7 @@ class MainViewModelTest {
         }
         val viewModel = MainViewModel(repository)
         try {
-            verify(resource, times(3)).onChanged(captor.capture())
-            verify(resource).onChanged(Resource.idle())
+            verify(resource, times(2)).onChanged(captor.capture())
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.error(errorMsg))
         } finally {
@@ -120,8 +118,7 @@ class MainViewModelTest {
         }
         val viewModel = MainViewModel(repository)
         try {
-            verify(resource, times(3)).onChanged(captor.capture())
-            verify(resource).onChanged(Resource.idle())
+            verify(resource, times(2)).onChanged(captor.capture())
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.error(errorMsg))
         } finally {

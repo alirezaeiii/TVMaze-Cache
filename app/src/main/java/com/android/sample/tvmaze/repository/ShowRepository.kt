@@ -22,7 +22,7 @@ class ShowRepository(
     private val contextProvider: CoroutineContextProvider
 ) {
 
-    private val _shows = MutableStateFlow<Resource<List<Show>>>(Resource.idle())
+    private val _shows = MutableStateFlow<Resource<List<Show>>>(Resource.loading())
     val shows: StateFlow<Resource<List<Show>>>
         get() = _shows
 
