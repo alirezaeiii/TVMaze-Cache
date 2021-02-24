@@ -37,6 +37,7 @@ class MainActivity : BaseActivity() {
                 when (resource.status) {
                     Resource.Status.SUCCESS -> {
                         binding.loadingSpinner.hide()
+                        binding.errorLayout.hide()
                         viewModelAdapter.submitList(resource.data)
                     }
                     Resource.Status.LOADING -> {
