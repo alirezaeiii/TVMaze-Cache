@@ -6,6 +6,7 @@ import androidx.work.WorkerParameters
 import com.android.sample.tvmaze.repository.ShowRepository
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import timber.log.Timber
 
 class RefreshShowWork(appContext: Context, params: WorkerParameters) :
     CoroutineWorker(appContext, params), KoinComponent {
@@ -20,7 +21,8 @@ class RefreshShowWork(appContext: Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
         val repository: ShowRepository by inject()
         return try {
-            repository.getShowsFromRemoteDataSource()
+            val apiShows = repository.getShowsFromRemoteDataSource()
+            Timber.d("Size of items: %d", apiShows.size)
             Result.success()
         } catch (err: Exception) {
             Result.failure()
