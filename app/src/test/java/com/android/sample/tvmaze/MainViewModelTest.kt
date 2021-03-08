@@ -73,7 +73,7 @@ class MainViewModelTest {
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.success(emptyList()))
         } finally {
-            viewModel.shows.asLiveData().removeObserver(resource)
+            repository.shows.asLiveData().removeObserver(resource)
         }
     }
 
@@ -97,7 +97,7 @@ class MainViewModelTest {
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.error(errorMsg))
         } finally {
-            viewModel.shows.asLiveData().removeObserver(resource)
+            repository.shows.asLiveData().removeObserver(resource)
         }
     }
 
@@ -122,7 +122,7 @@ class MainViewModelTest {
             verify(resource).onChanged(Resource.loading())
             verify(resource).onChanged(Resource.error(errorMsg))
         } finally {
-            viewModel.shows.asLiveData().removeObserver(resource)
+            repository.shows.asLiveData().removeObserver(resource)
         }
     }
 }
