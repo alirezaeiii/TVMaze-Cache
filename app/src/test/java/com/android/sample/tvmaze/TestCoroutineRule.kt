@@ -29,11 +29,11 @@ class TestCoroutineRule : TestRule {
     fun runBlockingTest(block: suspend TestCoroutineScope.() -> Unit) =
         testCoroutineScope.runBlockingTest { block() }
 
-    fun pause() {
+    fun pauseDispatcher() {
         testCoroutineScope.pauseDispatcher()
     }
 
-    fun resume() {
+    fun resumeDispatcher() {
         testCoroutineScope.resumeDispatcher()
     }
 }

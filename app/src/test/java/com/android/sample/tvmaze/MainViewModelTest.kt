@@ -60,13 +60,13 @@ class MainViewModelTest {
         val repository = ShowRepository(dao, api, context, TestContextProvider())
         assertThat(repository.shows.value, `is`(Resource.loading()))
 
-        testCoroutineRule.pause()
+        testCoroutineRule.pauseDispatcher()
 
         val viewModel = MainViewModel(repository)
 
         assertThat(viewModel.shows.value, `is`(Resource.loading()))
 
-        testCoroutineRule.resume()
+        testCoroutineRule.resumeDispatcher()
 
         assertThat(viewModel.shows.value, `is`(Resource.success(emptyList())))
     }
@@ -86,13 +86,13 @@ class MainViewModelTest {
         val repository = ShowRepository(dao, api, context, TestContextProvider())
         assertThat(repository.shows.value, `is`(Resource.loading()))
 
-        testCoroutineRule.pause()
+        testCoroutineRule.pauseDispatcher()
 
         val viewModel = MainViewModel(repository)
 
         assertThat(viewModel.shows.value, `is`(Resource.loading()))
 
-        testCoroutineRule.resume()
+        testCoroutineRule.resumeDispatcher()
 
         assertThat(viewModel.shows.value, `is`(Resource.error(errorMsg)))
     }
@@ -111,13 +111,13 @@ class MainViewModelTest {
         val repository = ShowRepository(dao, api, context, TestContextProvider())
         assertThat(repository.shows.value, `is`(Resource.loading()))
 
-        testCoroutineRule.pause()
+        testCoroutineRule.pauseDispatcher()
 
         val viewModel = MainViewModel(repository)
 
         assertThat(viewModel.shows.value, `is`(Resource.loading()))
 
-        testCoroutineRule.resume()
+        testCoroutineRule.resumeDispatcher()
 
         assertThat(viewModel.shows.value, `is`(Resource.error(errorMsg)))
     }
