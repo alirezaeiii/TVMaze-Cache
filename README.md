@@ -6,7 +6,7 @@ A sample to showcase Kotlin, MVVM, Koin, Coroutines, StateFlow, Room, WorkManage
 * Jetpack Libraries and Architecture Components.
 
 ## Testing
-Local unit testing is done for ViewModel layer.
+Local unit testing is done for ViewModel and Repository layers.
 
 ## Libraries
 * [Android Jetpack](https://developer.android.com/jetpack)
