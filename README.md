@@ -23,6 +23,7 @@ Local unit testing is done for ViewModel and Repository layers.
 * [OkHttp interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor) Logs HTTP requests and responses.
 * [Material Design](https://material.io/develop/android/) Build beautiful, usable products using Material Components for Android.
 * [Mockito](https://github.com/mockito/mockito) which is the most popular Mocking framework for unit tests written in Java as well as Kotlin.
+* [MockK](https://mockk.io/ANDROID.html) mocking library for Kotlin
 
 ## Licence
     MIT License
