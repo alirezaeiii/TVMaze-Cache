@@ -13,7 +13,7 @@ abstract class BaseRepository<T>(
         private val contextProvider: CoroutineContextProvider
 ) {
 
-    protected abstract suspend fun query(): Pair<Boolean, T>
+    protected abstract suspend fun query(): QueryResult<T>
 
     protected abstract suspend fun fetch(): T
 
@@ -22,14 +22,14 @@ abstract class BaseRepository<T>(
     suspend fun sendRequest() = flow {
         emit(Resource.loading())
         val queryResult = query()
-        if (queryResult.first) {
+        if (queryResult.shouldRefresh) {
             if (context.isNetworkAvailable()) {
                 emit(Resource.success(refresh()))
             } else {
                 emit(Resource.error(context.getString(R.string.failed_network_msg)))
             }
         } else {
-            emit(Resource.success(queryResult.second))
+            emit(Resource.success(queryResult.result))
             try {
                 emit(Resource.success(refresh()))
             } catch (err: Exception) {
@@ -45,4 +45,9 @@ abstract class BaseRepository<T>(
         saveFetchResult(apiResult)
         return apiResult
     }
+
+    class QueryResult<T>(
+            val shouldRefresh: Boolean,
+            val result: T
+    )
 }

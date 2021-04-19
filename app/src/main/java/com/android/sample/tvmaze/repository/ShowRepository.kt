@@ -8,7 +8,6 @@ import com.android.sample.tvmaze.domain.asDatabaseModel
 import com.android.sample.tvmaze.network.TVMazeService
 import com.android.sample.tvmaze.util.contextProvider.CoroutineContextProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flow
 
 @ExperimentalCoroutinesApi
 class ShowRepository(
@@ -18,9 +17,9 @@ class ShowRepository(
         contextProvider: CoroutineContextProvider
 ) : BaseRepository<List<Show>>(context, contextProvider) {
 
-    override suspend fun query(): Pair<Boolean, List<Show>> {
+    override suspend fun query(): QueryResult<List<Show>> {
         val showsFromDb = dao.getShows()
-        return Pair(showsFromDb.isEmpty(), showsFromDb.asDomainModel())
+        return QueryResult(showsFromDb.isEmpty(), showsFromDb.asDomainModel())
     }
 
     override suspend fun fetch(): List<Show> = api.fetchShowList()
