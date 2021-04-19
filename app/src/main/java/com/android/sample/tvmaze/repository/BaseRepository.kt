@@ -22,7 +22,7 @@ abstract class BaseRepository<T>(
     suspend fun sendRequest() = flow {
         emit(Resource.loading())
         val queryResult = query()
-        if (queryResult.shouldRefresh) {
+        if (queryResult.shouldFetch) {
             if (context.isNetworkAvailable()) {
                 emit(Resource.success(refresh()))
             } else {
@@ -47,7 +47,7 @@ abstract class BaseRepository<T>(
     }
 
     class QueryResult<T>(
-            val shouldRefresh: Boolean,
+            val shouldFetch: Boolean,
             val result: T
     )
 }
