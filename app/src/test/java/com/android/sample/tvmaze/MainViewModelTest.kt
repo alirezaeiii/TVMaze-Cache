@@ -58,7 +58,6 @@ class MainViewModelTest {
         }
 
         val repository = ShowRepository(dao, api, context, TestContextProvider())
-        assertThat(repository.shows.value, `is`(Resource.loading()))
 
         testCoroutineRule.pauseDispatcher()
 
@@ -84,7 +83,6 @@ class MainViewModelTest {
             `when`(dao.getShows()).thenReturn(emptyList())
         }
         val repository = ShowRepository(dao, api, context, TestContextProvider())
-        assertThat(repository.shows.value, `is`(Resource.loading()))
 
         testCoroutineRule.pauseDispatcher()
 
@@ -109,7 +107,6 @@ class MainViewModelTest {
             `when`(dao.getShows()).thenReturn(emptyList())
         }
         val repository = ShowRepository(dao, api, context, TestContextProvider())
-        assertThat(repository.shows.value, `is`(Resource.loading()))
 
         testCoroutineRule.pauseDispatcher()
 
