@@ -18,13 +18,14 @@ class ShowRepository(
         contextProvider: CoroutineContextProvider
 ) : BaseRepository<List<Show>>(context, contextProvider) {
 
-    override suspend fun query() = dao.getShows().asDomainModel()
+    override suspend fun query(): Pair<Boolean, List<Show>> {
+        val showsFromDb = dao.getShows()
+        return Pair(showsFromDb.isEmpty(), showsFromDb.asDomainModel())
+    }
 
     override suspend fun fetch(): List<Show> = api.fetchShowList()
 
     override suspend fun saveFetchResult(requestType: List<Show>) {
         dao.insertAll(*requestType.asDatabaseModel())
     }
-
-    override suspend fun shouldFetch(): Boolean = dao.getShows().isEmpty()
 }

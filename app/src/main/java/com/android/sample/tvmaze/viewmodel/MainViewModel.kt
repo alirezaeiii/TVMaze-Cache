@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 class MainViewModel(
-    private val repository: ShowRepository
+        private val repository: ShowRepository
 ) : ViewModel() {
 
     private val _shows = MutableStateFlow<Resource<List<Show>>>(Resource.loading())

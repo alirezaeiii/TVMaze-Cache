@@ -12,28 +12,27 @@ abstract class BaseRepository<T>(private val context: Context,
                                  private val contextProvider: CoroutineContextProvider
 ) {
 
-    protected abstract suspend fun query(): T
+    protected abstract suspend fun query(): Pair<Boolean, T>
 
     protected abstract suspend fun fetch(): T
 
     protected abstract suspend fun saveFetchResult(requestType : T)
 
-    protected abstract suspend fun shouldFetch(): Boolean
-
     suspend fun sendRequest() = flow {
         emit(Resource.loading())
-        if (shouldFetch()) {
+        val queryResult = query()
+        if (queryResult.first) {
             if (context.isNetworkAvailable()) {
                 saveFetchResult(fetch())
-                emit(Resource.success(query()))
+                emit(Resource.success(query().second))
             } else {
                 emit(Resource.error(context.getString(R.string.failed_network_msg)))
             }
         } else {
-            emit(Resource.success(query()))
+            emit(Resource.success(queryResult.second))
             try {
                 saveFetchResult(fetch())
-                emit(Resource.success(query()))
+                emit(Resource.success(query().second))
             } catch (err: Exception) {
                 Timber.e(err)
             }
