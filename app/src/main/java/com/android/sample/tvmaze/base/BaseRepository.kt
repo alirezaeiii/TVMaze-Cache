@@ -1,4 +1,4 @@
-package com.android.sample.tvmaze.repository
+package com.android.sample.tvmaze.base
 
 import android.content.Context
 import com.android.sample.tvmaze.R
@@ -13,25 +13,29 @@ abstract class BaseRepository<T>(
         private val contextProvider: CoroutineContextProvider
 ) {
 
-    protected abstract suspend fun query(): QueryResult<T>
+    protected abstract suspend fun query(): T
+
+    protected abstract suspend fun queryResult(): QueryResult<T>
 
     protected abstract suspend fun fetch(): T
 
     protected abstract suspend fun saveFetchResult(requestType: T)
 
-    suspend fun sendRequest() = flow {
+    fun sendRequest() = flow {
         emit(Resource.loading())
-        val queryResult = query()
+        val queryResult = queryResult()
         if (queryResult.shouldFetch) {
             if (context.isNetworkAvailable()) {
-                emit(Resource.success(refresh()))
+                refresh()
+                emit(Resource.success(query()))
             } else {
                 emit(Resource.error(context.getString(R.string.failed_network_msg)))
             }
         } else {
             emit(Resource.success(queryResult.result))
             try {
-                emit(Resource.success(refresh()))
+                refresh()
+                emit(Resource.success(query()))
             } catch (err: Exception) {
                 Timber.e(err)
             }
@@ -40,10 +44,8 @@ abstract class BaseRepository<T>(
         emit(Resource.error(context.getString(R.string.failed_loading_msg)))
     }
 
-    suspend fun refresh(): T {
-        val apiResult = fetch()
-        saveFetchResult(apiResult)
-        return apiResult
+    suspend fun refresh() {
+        saveFetchResult(fetch())
     }
 
     class QueryResult<T>(
