@@ -14,14 +14,9 @@ class ShowRepository(
         private val api: TVMazeService,
         context: Context,
         contextProvider: CoroutineContextProvider
-) : BaseRepository<List<Show>>(context, contextProvider) {
+) : BaseRepository<Show>(context, contextProvider) {
 
     override suspend fun query(): List<Show> = dao.getShows().asDomainModel()
-
-    override suspend fun queryResult(): QueryResult<List<Show>> {
-        val showsFromDb = query()
-        return QueryResult(showsFromDb.isEmpty(), showsFromDb)
-    }
 
     override suspend fun fetch(): List<Show> = api.fetchShowList()
 
