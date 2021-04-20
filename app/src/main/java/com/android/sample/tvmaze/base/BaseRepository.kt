@@ -21,19 +21,20 @@ abstract class BaseRepository<T>(
 
     fun sendRequest() = flow {
         emit(Resource.loading())
-        val queryResult = query()
-        if (queryResult.isNotEmpty()) {
-            emit(Resource.success(queryResult))
+        val resultFromDb = query()
+        val resultIsEmpty = resultFromDb.isEmpty()
+        if (!resultIsEmpty) {
+            emit(Resource.success(resultFromDb))
         }
         try {
             if (context.isNetworkAvailable()) {
                 refresh()
                 emit(Resource.success(query()))
-            } else if (queryResult.isEmpty()) {
+            } else if (resultIsEmpty) {
                 emit(Resource.error(context.getString(R.string.failed_network_msg)))
             }
         } catch (err: Exception) {
-            if (queryResult.isEmpty()) emit(Resource.error(context.getString(R.string.failed_loading_msg)))
+            if (resultIsEmpty) emit(Resource.error(context.getString(R.string.failed_loading_msg)))
         }
     }.flowOn(contextProvider.io)
 
