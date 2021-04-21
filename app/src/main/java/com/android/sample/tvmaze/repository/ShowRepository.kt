@@ -20,7 +20,7 @@ class ShowRepository(
 
     override suspend fun fetch(): List<Show> = api.fetchShowList()
 
-    override suspend fun saveFetchResult(requestType: List<Show>) {
-        dao.insertAll(*requestType.asDatabaseModel())
+    override suspend fun saveFetchResult(items: List<Show>) {
+        dao.insertAll(*items.asDatabaseModel())
     }
 }

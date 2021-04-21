@@ -17,7 +17,7 @@ abstract class BaseRepository<T>(
 
     protected abstract suspend fun fetch(): List<T>
 
-    protected abstract suspend fun saveFetchResult(requestType: List<T>)
+    protected abstract suspend fun saveFetchResult(items: List<T>)
 
     fun sendRequest() = flow {
         emit(Resource.loading())
