@@ -45,9 +45,11 @@ class MainActivity : BaseActivity() {
                         binding.errorLayout.hide()
                     }
                     Resource.Status.ERROR -> {
-                        binding.loadingSpinner.hide()
-                        binding.errorLayout.show()
-                        binding.errorMsg.text = resource.message
+                        if (viewModelAdapter.itemCount == 0) {
+                            binding.loadingSpinner.hide()
+                            binding.errorLayout.show()
+                            binding.errorMsg.text = resource.message
+                        }
                     }
                 }
             }
