@@ -26,15 +26,15 @@ abstract class BaseRepository<T>(
                 emit(Resource.success(it))
             }
         }
-        try {
-            if (context.isNetworkAvailable()) {
+        if (context.isNetworkAvailable()) {
+            try {
                 refresh()
                 emit(Resource.success(query()))
-            } else {
-                emit(Resource.error(context.getString(R.string.failed_network_msg)))
+            } catch (err: Exception) {
+                emit(Resource.error(context.getString(R.string.failed_loading_msg)))
             }
-        } catch (err: Exception) {
-            emit(Resource.error(context.getString(R.string.failed_loading_msg)))
+        } else {
+            emit(Resource.error(context.getString(R.string.failed_network_msg)))
         }
     }.flowOn(contextProvider.io)
 
