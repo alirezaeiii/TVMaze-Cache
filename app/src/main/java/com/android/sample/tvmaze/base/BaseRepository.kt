@@ -25,16 +25,16 @@ abstract class BaseRepository<T>(
             if (it.isNotEmpty()) {
                 emit(Resource.success(it))
             }
-        }
-        if (context.isNetworkAvailable()) {
-            try {
-                refresh()
-                emit(Resource.success(query()))
-            } catch (err: Exception) {
-                emit(Resource.error(context.getString(R.string.failed_loading_msg)))
+            if (context.isNetworkAvailable()) {
+                try {
+                    refresh()
+                    emit(Resource.success(query()))
+                } catch (err: Exception) {
+                    emit(Resource.error(context.getString(R.string.failed_loading_msg), it))
+                }
+            } else {
+                emit(Resource.error(context.getString(R.string.failed_network_msg), it))
             }
-        } else {
-            emit(Resource.error(context.getString(R.string.failed_network_msg)))
         }
     }.flowOn(contextProvider.io)
 

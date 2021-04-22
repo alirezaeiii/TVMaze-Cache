@@ -1,6 +1,7 @@
 package com.android.sample.tvmaze.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.android.sample.tvmaze.R
 import com.android.sample.tvmaze.base.BaseActivity
@@ -45,10 +46,20 @@ class MainActivity : BaseActivity() {
                         binding.errorLayout.hide()
                     }
                     Resource.Status.ERROR -> {
-                        if (viewModelAdapter.itemCount == 0) {
-                            binding.loadingSpinner.hide()
-                            binding.errorLayout.show()
-                            binding.errorMsg.text = resource.message
+                        when {
+                            resource.data.isNullOrEmpty() -> {
+                                binding.loadingSpinner.hide()
+                                binding.errorLayout.show()
+                                binding.errorMsg.text = resource.message
+                            }
+                            savedInstanceState == null -> {
+                                Toast.makeText(applicationContext, resource.message, Toast.LENGTH_LONG).show()
+                            }
+                            else -> {
+                                binding.loadingSpinner.hide()
+                                binding.errorLayout.hide()
+                                viewModelAdapter.submitList(resource.data)
+                            }
                         }
                     }
                 }
