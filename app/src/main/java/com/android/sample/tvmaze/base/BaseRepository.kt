@@ -30,7 +30,8 @@ abstract class BaseRepository<T>(
                     refresh()
                     emit(Resource.success(query()))
                 } catch (err: Exception) {
-                    emit(Resource.error(context.getString(R.string.failed_loading_msg), it))
+                    emit(Resource.error(if (it.isEmpty()) context.getString(R.string.failed_loading_msg) else
+                        context.getString(R.string.failed_refresh_msg), it))
                 }
             } else {
                 emit(Resource.error(context.getString(R.string.failed_network_msg), it))
