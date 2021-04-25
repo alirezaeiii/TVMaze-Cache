@@ -1,7 +1,7 @@
 package com.android.sample.tvmaze.repository
 
 import android.content.Context
-import com.android.sample.tvmaze.base.BaseRepository
+import com.android.sample.tvmaze.base.BaseListRepository
 import com.android.sample.tvmaze.database.ShowDao
 import com.android.sample.tvmaze.database.asDomainModel
 import com.android.sample.tvmaze.domain.Show
@@ -14,7 +14,7 @@ class ShowRepository(
         private val api: TVMazeService,
         context: Context,
         contextProvider: CoroutineContextProvider
-) : BaseRepository<Show>(context, contextProvider) {
+) : BaseListRepository<Show>(context, contextProvider) {
 
     override suspend fun query(): List<Show> = dao.getShows().asDomainModel()
 

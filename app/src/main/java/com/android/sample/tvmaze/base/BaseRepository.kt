@@ -14,16 +14,18 @@ abstract class BaseRepository<T>(
         contextProvider: CoroutineContextProvider
 ) {
 
-    protected abstract suspend fun query(): List<T>
+    protected abstract suspend fun query(): T
 
-    protected abstract suspend fun fetch(): List<T>
+    protected abstract suspend fun fetch(): T
 
-    protected abstract suspend fun saveFetchResult(items: List<T>)
+    protected abstract suspend fun saveFetchResult(items: T)
 
-    val request: Flow<Resource<List<T>>> = flow {
+    protected abstract fun isNotEmpty(it: T) : Boolean
+
+    val result: Flow<Resource<T>> = flow {
         emit(Resource.loading())
         query().let {
-            if (it.isNotEmpty()) {
+            if (isNotEmpty(it)) {
                 // ****** STEP 1: VIEW CACHE ******
                 emit(Resource.success(it))
             }

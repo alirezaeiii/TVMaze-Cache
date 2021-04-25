@@ -26,7 +26,7 @@ class MainViewModel(
 
     fun refreshShows() {
         viewModelScope.launch {
-            repository.request.collect {
+            repository.result.collect {
                 _shows.value = it
             }
         }
