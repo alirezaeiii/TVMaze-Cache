@@ -25,13 +25,12 @@ class MainActivity : BaseActivity() {
         applyExitMaterialTransform()
         super.onCreate(savedInstanceState)
         val viewModel = getViewModel<MainViewModel>()
+        binding.apply {
+            vm = viewModel
+        }
 
         val viewModelAdapter = MainAdapter(this)
         binding.recyclerView.adapter = viewModelAdapter
-
-        binding.retryButton.setOnClickListener {
-            viewModel.refreshShows()
-        }
 
         lifecycleScope.launch {
             viewModel.shows.collect { resource ->
@@ -64,11 +63,6 @@ class MainActivity : BaseActivity() {
                     }
                 }
             }
-        }
-
-        binding.apply {
-            vm = viewModel
-            lifecycleOwner = this@MainActivity
         }
     }
 }
