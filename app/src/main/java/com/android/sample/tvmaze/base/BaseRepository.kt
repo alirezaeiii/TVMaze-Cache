@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 abstract class BaseRepository<T>(
-        private val context: Context,
-        contextProvider: CoroutineContextProvider
+    private val context: Context,
+    contextProvider: CoroutineContextProvider
 ) {
 
     protected abstract suspend fun query(): T
@@ -20,7 +20,7 @@ abstract class BaseRepository<T>(
 
     protected abstract suspend fun saveFetchResult(items: T)
 
-    protected abstract fun isNotEmpty(it: T) : Boolean
+    protected open fun isNotEmpty(it: T) = it != null
 
     val result: Flow<Resource<T>> = flow {
         emit(Resource.loading())
