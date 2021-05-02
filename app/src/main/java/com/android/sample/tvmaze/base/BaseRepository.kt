@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 abstract class BaseRepository<T>(
-    private val context: Context,
-    contextProvider: CoroutineContextProvider
+        context: Context,
+        contextProvider: CoroutineContextProvider
 ) {
 
     protected abstract suspend fun query(): T
