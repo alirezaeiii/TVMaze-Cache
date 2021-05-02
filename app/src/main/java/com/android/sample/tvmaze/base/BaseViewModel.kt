@@ -1,8 +1,7 @@
-package com.android.sample.tvmaze.viewmodel
+package com.android.sample.tvmaze.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.sample.tvmaze.base.BaseRepository
 import com.android.sample.tvmaze.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
