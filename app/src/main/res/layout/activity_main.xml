@@ -64,8 +64,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="@{()->vm.refreshShows()}"
-                android:text="Retry" />
+                android:onClick="@{()->vm.refresh()}"
+                android:text="@string/retry" />
 
         </LinearLayout>
 
