@@ -15,14 +15,16 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.getViewModel
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity<MainViewModel>() {
 
     override val binding: ActivityMainBinding by binding(R.layout.activity_main)
+
+    override val viewModel: MainViewModel
+        get() = getViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         applyExitMaterialTransform()
         super.onCreate(savedInstanceState)
-        val viewModel = getViewModel<MainViewModel>()
         binding.apply {
             vm = viewModel
         }

@@ -8,12 +8,12 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import com.android.sample.tvmaze.R
-import com.android.sample.tvmaze.base.BaseActivity
+import com.android.sample.tvmaze.base.BaseCompatActivity
 import com.android.sample.tvmaze.databinding.ActivityDetailBinding
 import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.util.applyMaterialTransform
 
-class DetailActivity : BaseActivity() {
+class DetailActivity : BaseCompatActivity() {
 
     override val binding: ActivityDetailBinding by binding(R.layout.activity_detail)
 
