@@ -12,9 +12,9 @@ open class BaseViewModel<T>(
         private val repository: BaseRepository<T>
 ) : ViewModel() {
 
-    private val _shows = MutableStateFlow<Resource<T>>(Resource.loading())
-    val shows: StateFlow<Resource<T>>
-        get() = _shows
+    private val _stateFlow = MutableStateFlow<Resource<T>>(Resource.loading())
+    val stateFlow: StateFlow<Resource<T>>
+        get() = _stateFlow
 
     init {
         refresh()
@@ -23,7 +23,7 @@ open class BaseViewModel<T>(
     fun refresh() {
         viewModelScope.launch {
             repository.result.collect {
-                _shows.value = it
+                _stateFlow.value = it
             }
         }
     }

@@ -67,11 +67,11 @@ class MainViewModelTest {
 
         val viewModel = MainViewModel(repository)
 
-        assertThat(viewModel.shows.value, `is`(Resource.loading()))
+        assertThat(viewModel.stateFlow.value, `is`(Resource.loading()))
 
         testCoroutineRule.resumeDispatcher()
 
-        assertThat(viewModel.shows.value, `is`(Resource.success(emptyList())))
+        assertThat(viewModel.stateFlow.value, `is`(Resource.success(emptyList())))
     }
 
     @Test
@@ -92,11 +92,11 @@ class MainViewModelTest {
 
         val viewModel = MainViewModel(repository)
 
-        assertThat(viewModel.shows.value, `is`(Resource.loading()))
+        assertThat(viewModel.stateFlow.value, `is`(Resource.loading()))
 
         testCoroutineRule.resumeDispatcher()
 
-        assertThat(viewModel.shows.value, `is`(Resource.error(errorMsg)))
+        assertThat(viewModel.stateFlow.value, `is`(Resource.error(errorMsg, emptyList())))
     }
 
     @Test
@@ -116,10 +116,10 @@ class MainViewModelTest {
 
         val viewModel = MainViewModel(repository)
 
-        assertThat(viewModel.shows.value, `is`(Resource.loading()))
+        assertThat(viewModel.stateFlow.value, `is`(Resource.loading()))
 
         testCoroutineRule.resumeDispatcher()
 
-        assertThat(viewModel.shows.value, `is`(Resource.error(errorMsg)))
+        assertThat(viewModel.stateFlow.value, `is`(Resource.error(errorMsg, emptyList())))
     }
 }

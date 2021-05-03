@@ -11,15 +11,13 @@ import com.android.sample.tvmaze.util.applyExitMaterialTransform
 import com.android.sample.tvmaze.util.hide
 import com.android.sample.tvmaze.util.show
 import com.android.sample.tvmaze.viewmodel.MainViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.getViewModel
 
-@ExperimentalCoroutinesApi
 class MainActivity : BaseActivity() {
 
-    private val binding: ActivityMainBinding by binding(R.layout.activity_main)
+    override val binding: ActivityMainBinding by binding(R.layout.activity_main)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         applyExitMaterialTransform()
@@ -33,7 +31,7 @@ class MainActivity : BaseActivity() {
         binding.recyclerView.adapter = viewModelAdapter
 
         lifecycleScope.launch {
-            viewModel.shows.collect { resource ->
+            viewModel.stateFlow.collect { resource ->
                 when (resource.status) {
                     Resource.Status.SUCCESS -> {
                         binding.loadingSpinner.hide()
@@ -52,7 +50,11 @@ class MainActivity : BaseActivity() {
                                 binding.errorMsg.text = resource.message
                             }
                             savedInstanceState == null -> {
-                                Toast.makeText(applicationContext, resource.message, Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    resource.message,
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                             else -> {
                                 binding.loadingSpinner.hide()

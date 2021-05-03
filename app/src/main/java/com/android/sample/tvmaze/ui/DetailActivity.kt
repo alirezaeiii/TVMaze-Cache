@@ -15,7 +15,7 @@ import com.android.sample.tvmaze.util.applyMaterialTransform
 
 class DetailActivity : BaseActivity() {
 
-    private val binding: ActivityDetailBinding by binding(R.layout.activity_detail)
+    override val binding: ActivityDetailBinding by binding(R.layout.activity_detail)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
