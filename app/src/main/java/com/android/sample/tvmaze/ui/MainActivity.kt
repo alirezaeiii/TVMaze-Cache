@@ -53,8 +53,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
                                 binding.errorMsg.text = resource.message
                             }
                             savedInstanceState == null -> {
-                                Toast.makeText(
-                                        applicationContext,
+                                Toast.makeText(applicationContext,
                                         resource.message,
                                         Toast.LENGTH_LONG
                                 ).show()
