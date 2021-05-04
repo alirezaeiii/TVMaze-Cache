@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import com.android.sample.tvmaze.R
 import com.android.sample.tvmaze.base.BaseActivity
 import com.android.sample.tvmaze.databinding.ActivityMainBinding
+import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.util.Resource
 import com.android.sample.tvmaze.util.applyExitMaterialTransform
 import com.android.sample.tvmaze.util.hide
@@ -22,6 +23,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
     override val viewModel: MainViewModel
         get() = getViewModel()
 
+    private lateinit var viewModelAdapter: MainAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         applyExitMaterialTransform()
         super.onCreate(savedInstanceState)
@@ -29,16 +32,14 @@ class MainActivity : BaseActivity<MainViewModel>() {
             vm = viewModel
         }
 
-        val viewModelAdapter = MainAdapter(this)
+        viewModelAdapter = MainAdapter(this)
         binding.recyclerView.adapter = viewModelAdapter
 
         lifecycleScope.launch {
             viewModel.stateFlow.collect { resource ->
                 when (resource.status) {
                     Resource.Status.SUCCESS -> {
-                        binding.loadingSpinner.hide()
-                        binding.errorLayout.hide()
-                        viewModelAdapter.submitList(resource.data)
+                        submitList(resource.data)
                     }
                     Resource.Status.LOADING -> {
                         binding.loadingSpinner.show()
@@ -53,20 +54,24 @@ class MainActivity : BaseActivity<MainViewModel>() {
                             }
                             savedInstanceState == null -> {
                                 Toast.makeText(
-                                    applicationContext,
-                                    resource.message,
-                                    Toast.LENGTH_LONG
+                                        applicationContext,
+                                        resource.message,
+                                        Toast.LENGTH_LONG
                                 ).show()
                             }
                             else -> {
-                                binding.loadingSpinner.hide()
-                                binding.errorLayout.hide()
-                                viewModelAdapter.submitList(resource.data)
+                                submitList(resource.data)
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun submitList(data: List<Show>?) {
+        binding.loadingSpinner.hide()
+        binding.errorLayout.hide()
+        viewModelAdapter.submitList(data)
     }
 }
