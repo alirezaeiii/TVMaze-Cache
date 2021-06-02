@@ -1,7 +1,7 @@
 package com.android.sample.tvmaze.viewmodel
 
+import com.android.sample.tvmaze.base.BaseListRepository
 import com.android.sample.tvmaze.base.BaseViewModel
 import com.android.sample.tvmaze.domain.Show
-import com.android.sample.tvmaze.repository.ShowRepository
 
-class MainViewModel(repository: ShowRepository) : BaseViewModel<List<Show>>(repository)
+class MainViewModel(repository: BaseListRepository<Show>) : BaseViewModel<List<Show>>(repository)
