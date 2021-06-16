@@ -37,7 +37,7 @@ class DetailActivity : BaseBindingActivity() {
     companion object {
         private const val SHOW_KEY = "showKey"
 
-        fun startActivityModel(context: Context?, startView: View, show: Show) {
+        fun startActivity(context: Context?, startView: View, show: Show) {
             if (context is Activity) {
                 val intent = Intent(context, DetailActivity::class.java)
                     .putExtra(SHOW_KEY, show)

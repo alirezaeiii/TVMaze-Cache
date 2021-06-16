@@ -36,7 +36,7 @@ class MainAdapter(
 
         fun bind(item: Show, activity: Activity) {
             binding.root.setOnClickListener {
-                DetailActivity.startActivityModel(activity, binding.itemContainer, item)
+                DetailActivity.startActivity(activity, binding.itemContainer, item)
             }
             with(binding) {
                 show = item
