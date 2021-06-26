@@ -5,6 +5,7 @@ import androidx.lifecycle.lifecycleScope
 import com.android.sample.tvmaze.R
 import com.android.sample.tvmaze.base.BaseActivity
 import com.android.sample.tvmaze.databinding.ActivityMainBinding
+import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.util.Resource
 import com.android.sample.tvmaze.util.applyExitMaterialTransform
 import com.android.sample.tvmaze.util.hide
@@ -23,6 +24,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     private lateinit var viewModelAdapter: MainAdapter
 
+    private var cache: ArrayList<Show>? = ArrayList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         applyExitMaterialTransform()
         super.onCreate(savedInstanceState)
@@ -40,6 +43,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
                         binding.loadingSpinner.hide()
                         binding.errorLayout.hide()
                         viewModelAdapter.submitList(resource.data)
+                        resource.data?.let { cache?.addAll(it) }
                     }
                     Resource.Status.LOADING -> {
                         binding.loadingSpinner.show()
@@ -55,5 +59,23 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 }
             }
         }
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(CACHED_KEY)) {
+            binding.loadingSpinner.hide()
+            binding.errorLayout.hide()
+            cache = savedInstanceState.getParcelableArrayList(CACHED_KEY)
+            viewModelAdapter.submitList(cache)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (!cache.isNullOrEmpty()) {
+            outState.putParcelableArrayList(CACHED_KEY, cache)
+        }
+    }
+
+    companion object {
+        private const val CACHED_KEY = "cached_key"
     }
 }
