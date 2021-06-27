@@ -24,8 +24,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     private lateinit var viewModelAdapter: MainAdapter
 
-    private var cache: ArrayList<Show>? = ArrayList()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         applyExitMaterialTransform()
         super.onCreate(savedInstanceState)
@@ -40,10 +38,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
             viewModel.stateFlow.collect { resource ->
                 when (resource.status) {
                     Resource.Status.SUCCESS -> {
-                        binding.loadingSpinner.hide()
-                        binding.errorLayout.hide()
-                        viewModelAdapter.submitList(resource.data)
-                        resource.data?.let { cache?.addAll(it) }
+                        submitList(resource.data)
                     }
                     Resource.Status.LOADING -> {
                         binding.loadingSpinner.show()
@@ -54,28 +49,18 @@ class MainActivity : BaseActivity<MainViewModel>() {
                             binding.loadingSpinner.hide()
                             binding.errorLayout.show()
                             binding.errorMsg.text = resource.message
+                        } else {
+                            submitList(resource.data)
                         }
                     }
                 }
             }
         }
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(CACHED_KEY)) {
-            binding.loadingSpinner.hide()
-            binding.errorLayout.hide()
-            cache = savedInstanceState.getParcelableArrayList(CACHED_KEY)
-            viewModelAdapter.submitList(cache)
-        }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        if (!cache.isNullOrEmpty()) {
-            outState.putParcelableArrayList(CACHED_KEY, cache)
-        }
-    }
-
-    companion object {
-        private const val CACHED_KEY = "cached_key"
+    private fun submitList(data: List<Show>?) {
+        binding.loadingSpinner.hide()
+        binding.errorLayout.hide()
+        viewModelAdapter.submitList(data)
     }
 }
