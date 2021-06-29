@@ -16,10 +16,6 @@ open class BaseViewModel<T>(
     val stateFlow: StateFlow<Resource<T>>
         get() = _stateFlow
 
-    init {
-        refresh()
-    }
-
     fun refresh() {
         viewModelScope.launch {
             repository.result.collect {
