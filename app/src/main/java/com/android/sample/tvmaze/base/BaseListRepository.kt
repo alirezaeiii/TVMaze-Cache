@@ -8,5 +8,5 @@ abstract class BaseListRepository<T>(
         contextProvider: CoroutineContextProvider
 ) : BaseRepository<List<T>>(context, contextProvider) {
 
-    override fun isNotEmpty(it: List<T>): Boolean = it.isNotEmpty()
+    override fun isNotEmpty(t: List<T>): Boolean = t.isNotEmpty()
 }
