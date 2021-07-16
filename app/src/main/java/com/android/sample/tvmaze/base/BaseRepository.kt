@@ -20,7 +20,7 @@ abstract class BaseRepository<T>(
 
     protected abstract suspend fun saveFetchResult(items: T)
 
-    protected open fun isNotEmpty(it: T) = it != null
+    protected open fun isNotEmpty(t: T) = t != null
 
     val result: Flow<Resource<T>> = flow {
         emit(Resource.loading())
