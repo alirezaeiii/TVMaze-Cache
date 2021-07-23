@@ -4,9 +4,4 @@ import com.android.sample.tvmaze.base.BaseListRepository
 import com.android.sample.tvmaze.base.BaseViewModel
 import com.android.sample.tvmaze.domain.Show
 
-class MainViewModel(repository: BaseListRepository<Show>) : BaseViewModel<List<Show>>(repository) {
-
-    init {
-        refresh()
-    }
-}
+class MainViewModel(repository: BaseListRepository<Show>) : BaseViewModel<List<Show>>(repository)
