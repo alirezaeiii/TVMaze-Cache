@@ -4,13 +4,14 @@ import android.content.Context
 import com.android.sample.tvmaze.R
 import com.android.sample.tvmaze.util.Resource
 import com.android.sample.tvmaze.util.isNetworkAvailable
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 abstract class BaseRepository<T>(
-        context: Context
+        context: Context,
+        dispatcher: CoroutineDispatcher
 ) {
 
     protected abstract suspend fun query(): T
@@ -41,7 +42,7 @@ abstract class BaseRepository<T>(
                 emit(Resource.error(context.getString(R.string.failed_network_msg), it))
             }
         }
-    }.flowOn(Dispatchers.IO)
+    }.flowOn(dispatcher)
 
     suspend fun refresh() {
         saveFetchResult(fetch())

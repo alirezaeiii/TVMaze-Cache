@@ -24,10 +24,15 @@ class TVMazeApplication : Application() {
 
         startKoin {
             androidContext(this@TVMazeApplication)
-            modules(listOf(networkModule,
+            modules(
+                listOf(
+                    networkModule,
                     persistenceModule,
                     repositoryModule,
-                    viewModelModule))
+                    viewModelModule,
+                    ioDispatcherModule
+                )
+            )
         }
 
         if (BuildConfig.DEBUG) {
@@ -41,22 +46,22 @@ class TVMazeApplication : Application() {
 
     private fun setupRecurringWork() {
         val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.UNMETERED)
-                .setRequiresBatteryNotLow(true)
-                .apply {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        setRequiresDeviceIdle(true)
-                    }
-                }.build()
+            .setRequiredNetworkType(NetworkType.UNMETERED)
+            .setRequiresBatteryNotLow(true)
+            .apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    setRequiresDeviceIdle(true)
+                }
+            }.build()
 
         val repeatingRequest = PeriodicWorkRequestBuilder<RefreshShowWork>(1, TimeUnit.DAYS)
-                .setConstraints(constraints)
-                .build()
+            .setConstraints(constraints)
+            .build()
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-                RefreshShowWork.WORK_NAME,
-                ExistingPeriodicWorkPolicy.KEEP,
-                repeatingRequest
+            RefreshShowWork.WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            repeatingRequest
         )
     }
 }

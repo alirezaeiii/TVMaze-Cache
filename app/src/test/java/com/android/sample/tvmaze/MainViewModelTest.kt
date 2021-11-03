@@ -21,6 +21,7 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
+import kotlinx.coroutines.Dispatchers
 
 @ExperimentalCoroutinesApi
 class MainViewModelTest {
@@ -56,7 +57,7 @@ class MainViewModelTest {
             `when`(dao.getShows()).thenReturn(emptyList())
         }
 
-        val repository = ShowRepository(dao, api, context)
+        val repository = ShowRepository(dao, api, context, Dispatchers.Main)
 
         testCoroutineRule.pauseDispatcher()
 
@@ -81,7 +82,7 @@ class MainViewModelTest {
             `when`(api.fetchShowList()).thenThrow(RuntimeException(""))
             `when`(dao.getShows()).thenReturn(emptyList())
         }
-        val repository = ShowRepository(dao, api, context)
+        val repository = ShowRepository(dao, api, context, Dispatchers.Main)
 
         testCoroutineRule.pauseDispatcher()
 
@@ -105,7 +106,7 @@ class MainViewModelTest {
         testCoroutineRule.runBlockingTest {
             `when`(dao.getShows()).thenReturn(emptyList())
         }
-        val repository = ShowRepository(dao, api, context)
+        val repository = ShowRepository(dao, api, context, Dispatchers.Main)
 
         testCoroutineRule.pauseDispatcher()
 

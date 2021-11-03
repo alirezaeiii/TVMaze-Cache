@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    single<BaseListRepository<Show>> { ShowRepository(get(), get(), get()) }
+    single<BaseListRepository<Show>> { ShowRepository(get(), get(), get(), get()) }
 }
