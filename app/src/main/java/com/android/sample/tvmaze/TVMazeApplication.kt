@@ -27,8 +27,7 @@ class TVMazeApplication : Application() {
             modules(listOf(networkModule,
                     persistenceModule,
                     repositoryModule,
-                    viewModelModule,
-                    ContextProviderModule))
+                    viewModelModule))
         }
 
         if (BuildConfig.DEBUG) {

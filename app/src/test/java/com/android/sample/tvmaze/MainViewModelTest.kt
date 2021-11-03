@@ -6,8 +6,6 @@ import com.android.sample.tvmaze.database.ShowDao
 import com.android.sample.tvmaze.network.TVMazeService
 import com.android.sample.tvmaze.repository.ShowRepository
 import com.android.sample.tvmaze.util.Resource
-import com.android.sample.tvmaze.util.contextProvider.CoroutineContextProvider
-import com.android.sample.tvmaze.util.contextProvider.TestContextProvider
 import com.android.sample.tvmaze.util.isNetworkAvailable
 import com.android.sample.tvmaze.viewmodel.MainViewModel
 import io.mockk.every
@@ -42,12 +40,9 @@ class MainViewModelTest {
     @Mock
     private lateinit var context: Context
 
-    private lateinit var contextProvider: CoroutineContextProvider
-
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        contextProvider = TestContextProvider()
     }
 
     @Test
@@ -61,7 +56,7 @@ class MainViewModelTest {
             `when`(dao.getShows()).thenReturn(emptyList())
         }
 
-        val repository = ShowRepository(dao, api, context, contextProvider)
+        val repository = ShowRepository(dao, api, context)
 
         testCoroutineRule.pauseDispatcher()
 
@@ -86,7 +81,7 @@ class MainViewModelTest {
             `when`(api.fetchShowList()).thenThrow(RuntimeException(""))
             `when`(dao.getShows()).thenReturn(emptyList())
         }
-        val repository = ShowRepository(dao, api, context, contextProvider)
+        val repository = ShowRepository(dao, api, context)
 
         testCoroutineRule.pauseDispatcher()
 
@@ -110,7 +105,7 @@ class MainViewModelTest {
         testCoroutineRule.runBlockingTest {
             `when`(dao.getShows()).thenReturn(emptyList())
         }
-        val repository = ShowRepository(dao, api, context, contextProvider)
+        val repository = ShowRepository(dao, api, context)
 
         testCoroutineRule.pauseDispatcher()
 
