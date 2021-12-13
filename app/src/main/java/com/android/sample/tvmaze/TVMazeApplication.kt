@@ -30,7 +30,7 @@ class TVMazeApplication : Application() {
                     persistenceModule,
                     repositoryModule,
                     viewModelModule,
-                    ioDispatcherModule
+                    dispatcherModule
                 )
             )
         }

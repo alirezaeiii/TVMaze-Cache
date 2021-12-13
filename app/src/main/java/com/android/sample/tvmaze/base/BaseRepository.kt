@@ -35,7 +35,7 @@ abstract class BaseRepository<T>(
                     refresh()
                     // ****** STEP 3: VIEW CACHE ******
                     emit(Resource.success(query()))
-                } catch (err: Exception) {
+                } catch (t: Throwable) {
                     emit(Resource.error(context.getString(R.string.failed_refresh_msg), it))
                 }
             } else {

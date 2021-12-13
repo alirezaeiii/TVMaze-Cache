@@ -1,10 +1,11 @@
 package com.android.sample.tvmaze.di
 
 import kotlinx.coroutines.Dispatchers
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val ioDispatcherModule = module {
+val dispatcherModule = module {
 
-    single { Dispatchers.IO }
+    single(named("io")) { Dispatchers.IO }
 }
 
