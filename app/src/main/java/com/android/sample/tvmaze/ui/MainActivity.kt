@@ -5,7 +5,6 @@ import androidx.lifecycle.lifecycleScope
 import com.android.sample.tvmaze.R
 import com.android.sample.tvmaze.base.BaseActivity
 import com.android.sample.tvmaze.databinding.ActivityMainBinding
-import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.util.Resource
 import com.android.sample.tvmaze.util.applyExitMaterialTransform
 import com.android.sample.tvmaze.util.hide
@@ -38,29 +37,21 @@ class MainActivity : BaseActivity<MainViewModel>() {
             viewModel.stateFlow.collect { resource ->
                 when (resource.status) {
                     Resource.Status.SUCCESS -> {
-                        submitList(resource.data)
+                        binding.loadingSpinner.hide()
+                        binding.errorLayout.hide()
+                        viewModelAdapter.submitList(resource.data)
                     }
                     Resource.Status.LOADING -> {
                         binding.loadingSpinner.show()
                         binding.errorLayout.hide()
                     }
                     Resource.Status.ERROR -> {
-                        if (resource.data.isNullOrEmpty()) {
-                            binding.loadingSpinner.hide()
-                            binding.errorLayout.show()
-                            binding.errorMsg.text = resource.message
-                        } else {
-                            submitList(resource.data)
-                        }
+                        binding.loadingSpinner.hide()
+                        binding.errorLayout.show()
+                        binding.errorMsg.text = resource.message
                     }
                 }
             }
         }
-    }
-
-    private fun submitList(data: List<Show>?) {
-        binding.loadingSpinner.hide()
-        binding.errorLayout.hide()
-        viewModelAdapter.submitList(data)
     }
 }
