@@ -36,14 +36,16 @@ abstract class BaseRepository<T>(
                     // ****** STEP 3: VIEW CACHE ******
                     emit(Resource.success(query()))
                 } catch (t: Throwable) {
-                    val errorMsg =
-                        if (isNotEmpty(it)) context.getString(R.string.failed_refresh_msg) else context.getString(
-                            R.string.failed_loading_msg
-                        )
-                    emit(Resource.error(errorMsg, it))
+//                    if (isNotEmpty(it)) {
+//                        return@flow
+//                    }
+                    emit(Resource.error(context.getString(R.string.failed_loading_msg)))
                 }
             } else {
-                emit(Resource.error(context.getString(R.string.failed_network_msg), it))
+//                if (isNotEmpty(it)) {
+//                    return@flow
+//                }
+                emit(Resource.error(context.getString(R.string.failed_network_msg)))
             }
         }
     }.flowOn(dispatcher)
