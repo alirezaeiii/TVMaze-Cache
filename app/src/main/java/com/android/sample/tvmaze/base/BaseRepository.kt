@@ -36,15 +36,15 @@ abstract class BaseRepository<T>(
                     // ****** STEP 3: VIEW CACHE ******
                     emit(Resource.success(query()))
                 } catch (t: Throwable) {
-//                    if (isNotEmpty(it)) {
-//                        return@flow
-//                    }
+                    if (isNotEmpty(it)) {
+                        return@flow
+                    }
                     emit(Resource.error(context.getString(R.string.failed_loading_msg)))
                 }
             } else {
-//                if (isNotEmpty(it)) {
-//                    return@flow
-//                }
+                if (isNotEmpty(it)) {
+                    return@flow
+                }
                 emit(Resource.error(context.getString(R.string.failed_network_msg)))
             }
         }
