@@ -39,10 +39,13 @@ abstract class BaseRepository<T>(
                     if(isNotEmpty(it)) {
                         return@flow
                     }
-                    emit(Resource.error(context.getString(R.string.failed_refresh_msg), it))
+                    emit(Resource.error(context.getString(R.string.failed_refresh_msg)))
                 }
             } else {
-                emit(Resource.error(context.getString(R.string.failed_network_msg), it))
+                if(isNotEmpty(it)) {
+                    return@flow
+                }
+                emit(Resource.error(context.getString(R.string.failed_network_msg)))
             }
         }
     }.flowOn(dispatcher)
