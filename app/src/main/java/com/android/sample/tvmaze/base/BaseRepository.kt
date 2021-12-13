@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 abstract class BaseRepository<T>(
-        context: Context,
-        dispatcher: CoroutineDispatcher
+    context: Context,
+    dispatcher: CoroutineDispatcher
 ) {
 
     protected abstract suspend fun query(): T
@@ -36,16 +36,14 @@ abstract class BaseRepository<T>(
                     // ****** STEP 3: VIEW CACHE ******
                     emit(Resource.success(query()))
                 } catch (t: Throwable) {
-                    if(isNotEmpty(it)) {
-                        return@flow
-                    }
-                    emit(Resource.error(context.getString(R.string.failed_refresh_msg)))
+                    val errorMsg =
+                        if (isNotEmpty(it)) context.getString(R.string.failed_refresh_msg) else context.getString(
+                            R.string.failed_loading_msg
+                        )
+                    emit(Resource.error(errorMsg, it))
                 }
             } else {
-                if(isNotEmpty(it)) {
-                    return@flow
-                }
-                emit(Resource.error(context.getString(R.string.failed_network_msg)))
+                emit(Resource.error(context.getString(R.string.failed_network_msg), it))
             }
         }
     }.flowOn(dispatcher)
