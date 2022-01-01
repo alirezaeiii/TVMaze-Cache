@@ -5,7 +5,7 @@
     app:layout_scrollFlags="scroll|enterAlways"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/toolbar_background">
 
     <TextView
         android:id="@+id/toolbar_title"

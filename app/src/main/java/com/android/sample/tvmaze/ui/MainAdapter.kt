@@ -32,14 +32,15 @@ class MainAdapter(
     /**
      * ViewHolder for category items. All work is done by data binding.
      */
-    class MainViewHolder(private val binding: ShowItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class MainViewHolder(private val binding: ShowItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Show, activity: Activity) {
-            binding.root.setOnClickListener {
-                DetailActivity.startActivity(activity, binding.itemContainer, item)
-            }
+        fun bind(show: Show, activity: Activity) {
             with(binding) {
-                show = item
+                this.show = show
+                root.setOnClickListener {
+                    DetailActivity.startActivity(activity, itemContainer, show)
+                }
                 executePendingBindings()
             }
         }
