@@ -92,7 +92,7 @@ class MainViewModelTest {
 
         testCoroutineRule.resumeDispatcher()
 
-        assertThat(viewModel.stateFlow.value, `is`(Resource.error(errorMsg, emptyList())))
+        assertThat(viewModel.stateFlow.value, `is`(Resource.error(errorMsg)))
     }
 
     @Test
@@ -116,6 +116,6 @@ class MainViewModelTest {
 
         testCoroutineRule.resumeDispatcher()
 
-        assertThat(viewModel.stateFlow.value, `is`(Resource.error(errorMsg, emptyList())))
+        assertThat(viewModel.stateFlow.value, `is`(Resource.error(errorMsg)))
     }
 }

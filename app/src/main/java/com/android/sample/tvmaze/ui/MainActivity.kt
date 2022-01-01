@@ -21,8 +21,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
     override val viewModel: MainViewModel
         get() = getViewModel()
 
-    private lateinit var viewModelAdapter: MainAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         applyExitMaterialTransform()
         super.onCreate(savedInstanceState)
@@ -30,7 +28,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
             vm = viewModel
         }
 
-        viewModelAdapter = MainAdapter(this)
+        val viewModelAdapter = MainAdapter(this)
         binding.recyclerView.adapter = viewModelAdapter
 
         lifecycleScope.launch {

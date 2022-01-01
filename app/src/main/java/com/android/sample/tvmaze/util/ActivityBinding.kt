@@ -38,7 +38,7 @@ fun AppCompatActivity.applyExitMaterialTransform() {
 }
 
 /** get a material container arc transform. */
-fun getContentTransform(): MaterialContainerTransform {
+private fun getContentTransform(): MaterialContainerTransform {
     return MaterialContainerTransform().apply {
         addTarget(android.R.id.content)
         duration = 450

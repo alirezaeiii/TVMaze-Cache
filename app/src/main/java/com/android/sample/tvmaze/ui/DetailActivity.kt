@@ -12,6 +12,7 @@ import com.android.sample.tvmaze.base.BaseBindingActivity
 import com.android.sample.tvmaze.databinding.ActivityDetailBinding
 import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.util.applyMaterialTransform
+import timber.log.Timber
 
 class DetailActivity : BaseBindingActivity() {
 
@@ -20,7 +21,7 @@ class DetailActivity : BaseBindingActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val showItem = intent.extras?.getParcelable<Show>(SHOW_KEY)
-        applyMaterialTransform(showItem?.name!!)
+        showItem?.let { applyMaterialTransform(it.name) } ?: Timber.w("missing \"showItem\" field")
         binding.apply {
             show = showItem
             activity = this@DetailActivity
@@ -37,7 +38,7 @@ class DetailActivity : BaseBindingActivity() {
     companion object {
         private const val SHOW_KEY = "showKey"
 
-        fun startActivity(context: Context?, startView: View, show: Show) {
+        fun startActivity(context: Context, startView: View, show: Show) {
             if (context is Activity) {
                 val intent = Intent(context, DetailActivity::class.java)
                     .putExtra(SHOW_KEY, show)
