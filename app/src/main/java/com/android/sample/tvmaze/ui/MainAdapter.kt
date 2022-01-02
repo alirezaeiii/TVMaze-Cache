@@ -1,6 +1,6 @@
 package com.android.sample.tvmaze.ui
 
-import android.app.Activity
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,7 +10,7 @@ import com.android.sample.tvmaze.domain.Show
 import com.android.sample.tvmaze.util.layoutInflater
 
 class MainAdapter(
-    private val activity: Activity
+    private val startDetailActivity: (View, Show) -> Unit
 ) : ListAdapter<Show, MainAdapter.MainViewHolder>(DiffCallback) {
 
     /**
@@ -26,7 +26,7 @@ class MainAdapter(
      * position.
      */
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        holder.bind(getItem(position), activity)
+        holder.bind(getItem(position), startDetailActivity)
     }
 
     /**
@@ -35,11 +35,11 @@ class MainAdapter(
     class MainViewHolder(private val binding: ShowItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(show: Show, activity: Activity) {
+        fun bind(show: Show, startDetailActivity: (View, Show) -> Unit) {
             with(binding) {
                 this.show = show
                 root.setOnClickListener {
-                    DetailActivity.startActivity(activity, itemContainer, show)
+                    startDetailActivity(itemContainer, show)
                 }
                 executePendingBindings()
             }

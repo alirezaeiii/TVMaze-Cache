@@ -28,7 +28,9 @@ class MainActivity : BaseActivity<MainViewModel>() {
             vm = viewModel
         }
 
-        val viewModelAdapter = MainAdapter(this)
+        val viewModelAdapter = MainAdapter { startView, show ->
+            DetailActivity.startActivity(this, startView, show)
+        }
         binding.recyclerView.adapter = viewModelAdapter
 
         lifecycleScope.launch {
