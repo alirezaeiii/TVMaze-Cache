@@ -1,6 +1,11 @@
 # TVMaze-Cache
 A sample to showcase Kotlin, MVVM, Koin, Coroutines, StateFlow, Room, WorkManager, Retrofit and Unit test.
 
+## Screenshots
+<p align="center">
+  <img src="https://github.com/alirezaeiii/TVMaze-Cache/blob/master/screenshots/screenshot.gif" width="250" />
+</p>
+
 ## Features
 * MVVM Architecture + Repository design Pattern.
 * Jetpack Libraries and Architecture Components.
