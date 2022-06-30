@@ -12,8 +12,8 @@ open class BaseViewModel<T>(
         private val repository: BaseRepository<T>
 ) : ViewModel() {
 
-    private val _stateFlow = MutableStateFlow<Resource<T>>(Resource.loading())
-    val stateFlow: StateFlow<Resource<T>>
+    private val _stateFlow = MutableStateFlow<Resource<List<T>>>(Resource.loading())
+    val stateFlow: StateFlow<Resource<List<T>>>
         get() = _stateFlow
 
     init {

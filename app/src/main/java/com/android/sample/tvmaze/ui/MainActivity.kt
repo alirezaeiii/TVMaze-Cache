@@ -14,11 +14,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.getViewModel
 
-class MainActivity : BaseActivity<MainViewModel>() {
+class MainActivity : BaseActivity() {
 
     override val binding: ActivityMainBinding by binding(R.layout.activity_main)
 
-    override val viewModel: MainViewModel
+    private val viewModel: MainViewModel
         get() = getViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {

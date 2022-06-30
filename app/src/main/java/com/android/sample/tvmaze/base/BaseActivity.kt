@@ -1,8 +1,18 @@
 package com.android.sample.tvmaze.base
 
-import androidx.lifecycle.ViewModel
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 
-abstract class BaseActivity<VM : ViewModel> : BaseBindingActivity() {
+/**
+ * BaseActivity is an abstract class for providing [DataBindingUtil].
+ */
+abstract class BaseActivity : AppCompatActivity() {
 
-    protected abstract val viewModel: VM
+    protected abstract val binding: ViewDataBinding
+
+    protected inline fun <reified T : ViewDataBinding> binding(
+        @LayoutRes resId: Int
+    ): Lazy<T> = lazy { DataBindingUtil.setContentView<T>(this, resId) }
 }
