@@ -23,7 +23,7 @@ open class BaseViewModel<T>(
     fun refresh() {
         viewModelScope.launch {
             repository.result.collect {
-                _stateFlow.value = it
+                _stateFlow.tryEmit(it)
             }
         }
     }
