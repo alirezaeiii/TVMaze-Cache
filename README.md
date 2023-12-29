@@ -1,5 +1,5 @@
 # TVMaze-Cache
-A sample to showcase Kotlin, MVVM, Koin, Coroutines, StateFlow, Room, WorkManager, Retrofit and Unit test which showcase Transform animation between two Views in Activities.
+A sample using Kotlin, MVVM, Koin, Coroutines, StateFlow, Room, WorkManager, Retrofit and Unit test which showcase Transform animation between two Views in Activities.
 
 ## Screenshots
 <p align="center">
